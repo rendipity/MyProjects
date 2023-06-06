@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry{
 
-    Map<String,Object> singletonMap =new HashMap<>();
+    private Map<String,Object> singletonMap =new HashMap<>();
 
     @Override
     public Object getSingleton(String beanName) {
@@ -13,7 +13,7 @@ public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry{
     }
 
 
-    public Object setSingleton(String beanName,Object bean) {
+    public Object addSingleton(String beanName,Object bean) {
         return singletonMap.put(beanName,bean);
     }
 }
