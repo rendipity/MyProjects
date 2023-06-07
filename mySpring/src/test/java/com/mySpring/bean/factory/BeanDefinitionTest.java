@@ -17,4 +17,14 @@ public class BeanDefinitionTest {
         MySpring mySpring = (MySpring)beanFactory.getBean("mySpring");
         mySpring.hello();
     }
+    @Test
+    public void testPropertyValues(){
+        DefaultListableBeanDefinition beanFactory = new DefaultListableBeanDefinition();
+        PropertyValues propertyValues =new PropertyValues();
+        propertyValues.addProperty(new PropertyValue("msg","applyProperty 0.0.1"));
+        BeanDefinition mySpringBeanDefinition = new BeanDefinition(MySpring.class,propertyValues);
+        beanFactory.registerBeanDefinition("mySpring",mySpringBeanDefinition);
+        MySpring mySpring = (MySpring)beanFactory.getBean("mySpring");
+        System.out.println(mySpring);
+    }
 }

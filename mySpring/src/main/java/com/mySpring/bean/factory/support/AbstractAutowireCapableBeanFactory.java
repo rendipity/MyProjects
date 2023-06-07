@@ -5,6 +5,8 @@ import com.mySpring.bean.BeansException;
 import com.mySpring.bean.factory.PropertyValue;
 import com.mySpring.bean.factory.config.BeanDefinition;
 
+import java.lang.reflect.Field;
+
 
 public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFactory{
 
@@ -41,7 +43,9 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
                 //通过反射设置属性
                 String name = propertyValue.getName();
                 Object value = propertyValue.getValue();
-                BeanUtil.setFieldValue(bean, name, value);
+                Field variable = bean.getClass().getDeclaredField(name);
+                variable.setAccessible(true);
+                variable.set(bean,value);
             }
         }catch (Exception e){
             e.printStackTrace();

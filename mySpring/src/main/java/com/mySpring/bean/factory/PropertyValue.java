@@ -12,4 +12,9 @@ public class PropertyValue {
     public Object getValue() {
         return value;
     }
+
+    public PropertyValue(String name, Object value) {
+        this.name = name;
+        this.value = value;
+    }
 }
