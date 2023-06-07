@@ -1,4 +1,4 @@
-package com.mySpring.bean.factory;
+package com.mySpring.bean.factory.Object;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

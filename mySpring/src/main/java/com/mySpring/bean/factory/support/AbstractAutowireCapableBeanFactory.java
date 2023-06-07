@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import com.mySpring.bean.BeansException;
 import com.mySpring.bean.factory.PropertyValue;
 import com.mySpring.bean.factory.config.BeanDefinition;
+import com.mySpring.bean.factory.config.BeanReference;
 
 import java.lang.reflect.Field;
 
@@ -43,6 +44,8 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
                 //通过反射设置属性
                 String name = propertyValue.getName();
                 Object value = propertyValue.getValue();
+                if (value instanceof BeanReference)
+                    value = getBean(((BeanReference)value).getBeanName());
                 Field variable = bean.getClass().getDeclaredField(name);
                 variable.setAccessible(true);
                 variable.set(bean,value);
