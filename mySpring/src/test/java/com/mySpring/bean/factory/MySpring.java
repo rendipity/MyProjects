@@ -46,7 +46,7 @@ public class MySpring {
         this.msg = msg;
     }
 
-    @Override
+   /* @Override
     public String toString() {
         SimpleDateFormat simpleDateFormat =new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return "MySpring{" +
@@ -54,5 +54,5 @@ public class MySpring {
                 ", date=" + simpleDateFormat.format(date) +
                 ", msg='" + msg + '\'' +
                 '}';
-    }
+    }*/
 }
