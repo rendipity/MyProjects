@@ -9,8 +9,9 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>MySchedule</module>
+        <module>Heap</module>
         <module>mySpring</module>
+        <module>JUC</module>
     </modules>
 
     <properties>
