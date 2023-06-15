@@ -1,9 +1,10 @@
 package com.mySpring.core.io;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 public interface Resource {
 
-    InputStream getInputStream();
+    InputStream getInputStream() throws IOException;
 
 }
