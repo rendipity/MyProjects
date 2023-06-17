@@ -22,4 +22,9 @@ public class DefaultListableBeanDefinition extends AbstractAutowireCapableBeanFa
             throw new BeansException("no bean named '"+beanName);
         return beanDefinition;
     }
+
+    @Override
+    public boolean containsBeanDefinition(String beanName) {
+        return beanDefinitionMap.containsKey(beanName);
+    }
 }
