@@ -6,6 +6,7 @@ import com.mySpring.bean.factory.config.BeanDefinition;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class DefaultListableBeanDefinition extends AbstractAutowireCapableBeanFactory  implements BeanDefinitionRegistry, ConfigurableListableBeanFactory {
 
@@ -25,7 +26,32 @@ public class DefaultListableBeanDefinition extends AbstractAutowireCapableBeanFa
     }
 
     @Override
+    public void preInstantiateSingletons() throws BeansException {
+        // 所有beanDefinitionMap中的bean都是singletonBean
+        this.beanDefinitionMap.keySet().forEach(this::getBean);
+    }
+
+    @Override
     public boolean containsBeanDefinition(String beanName) {
         return beanDefinitionMap.containsKey(beanName);
+    }
+
+    @Override
+    public <T> Map<String, T> getBeansOfType(Class<T> type) {
+        Map<String, T> result = new HashMap<>();
+        beanDefinitionMap.forEach((beanName,beanDefinition)->{
+            Class beanClass = beanDefinition.getBeanClass();
+            if (type.isAssignableFrom(beanClass)){
+                T bean = (T)getBean(beanName);
+                result.put(beanName,bean);
+            }
+        });
+        return result;
+    }
+
+    @Override
+    public String[] getBeanDefinitionNames() {
+        Set<String> beanNameSet = beanDefinitionMap.keySet();
+        return beanNameSet.toArray(new String[0]);
     }
 }

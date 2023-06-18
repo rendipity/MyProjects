@@ -28,8 +28,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
          }catch (Exception e){
              throw new BeansException("failed create bean:"+beanName);
          }
-
-        addSingleton(beanName,beanDefinition);
+        addSingleton(beanName,bean);
         return bean;
     }
     private Object createBeanInstance(String beanName,BeanDefinition beanDefinition) throws BeansException{

@@ -16,6 +16,6 @@ public class MyBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
     public void postProcessorBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
         BeanDefinition studentDefinition = beanFactory.getBeanDefinition("student");
         PropertyValues propertyValues = studentDefinition.getPropertyValues();
-        propertyValues.addProperty(new PropertyValue("name","beanFactoryPostProcessor"));
+        propertyValues.addProperty(new PropertyValue("name","nameChangedByBeanFactoryPostProcessor"));
     }
 }
