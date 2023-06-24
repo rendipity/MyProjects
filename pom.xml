@@ -12,6 +12,7 @@
         <module>Heap</module>
         <module>mySpring</module>
         <module>JUC</module>
+        <module>netty</module>
     </modules>
 
     <properties>
