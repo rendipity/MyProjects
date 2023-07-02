@@ -79,9 +79,18 @@ public class UserHandler extends ChannelInboundHandlerAdapter {
                         case "gsend":
                             ctx.writeAndFlush(new GroupChatRequestMessage(loginRequestMessage.getUsername(),part[1],part[2]));
                             break;
-                        case "help":
-                            printHelpMenu();
+                        case "gjoin":
+                            System.out.println("暂不支持----升级中");
                             break;
+                        case "gquit":
+                            System.out.println("暂不支持----升级中");
+                            break;
+                        case "quit":
+
+                            break;
+                        case "help":
+                        printHelpMenu();
+                        break;
                     }
                 }
             }
