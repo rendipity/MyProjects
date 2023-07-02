@@ -2,7 +2,7 @@ package com.netty.demo.netty.chatroom.message;
 
 import java.io.Serializable;
 
-import static com.netty.demo.netty.chatroom.Enum.MessageEnum.CHAT_MESSAGE;
+import static com.netty.demo.netty.chatroom.Enum.MessageEnum.CHAT_REQUEST_MESSAGE;
 
 public class ChatRequestMessage implements Message, Serializable {
 
@@ -39,7 +39,7 @@ public class ChatRequestMessage implements Message, Serializable {
 
     @Override
     public Integer getMessageType() {
-        return CHAT_MESSAGE.getType();
+        return CHAT_REQUEST_MESSAGE.getType();
     }
 
     @Override

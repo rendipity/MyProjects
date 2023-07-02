@@ -1,17 +1,21 @@
 package com.netty.demo.netty.chatroom.handler.client;
 
 import com.netty.demo.netty.chatroom.message.ChatRequestMessage;
+import com.netty.demo.netty.chatroom.message.GroupCreateRequestMessage;
 import com.netty.demo.netty.chatroom.message.LoginRequestMessage;
 import com.netty.demo.netty.chatroom.message.LoginResponseMessage;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Arrays;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class UserHandler extends ChannelInboundHandlerAdapter {
@@ -68,9 +72,18 @@ public class UserHandler extends ChannelInboundHandlerAdapter {
                     switch (part[0]){
                         case "send":
                             ctx.writeAndFlush(new ChatRequestMessage(loginRequestMessage.getUsername(),part[1],part[2]));
+                            break;
+                        case "gcreate":
+                            String[] members = part[2].split(",");
+                            Set<String> membersSet = Arrays.stream(members).collect(Collectors.toSet());
+                            membersSet.add(loginRequestMessage.getUsername());
+                            ctx.writeAndFlush(new GroupCreateRequestMessage(loginRequestMessage.getUsername(),part[1],membersSet));
+                            break;
                         /*case "gsend":
                             ctx.writeAndFlush(new );*/
-
+                        case "help":
+                            printHelpMenu();
+                            break;
                     }
                 }
             }

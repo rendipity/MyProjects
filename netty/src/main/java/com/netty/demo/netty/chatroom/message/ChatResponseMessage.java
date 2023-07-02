@@ -2,7 +2,7 @@ package com.netty.demo.netty.chatroom.message;
 
 import java.io.Serializable;
 
-import static com.netty.demo.netty.chatroom.Enum.MessageEnum.CHAT_MESSAGE;
+import static com.netty.demo.netty.chatroom.Enum.MessageEnum.CHAT_RESPONSE_MESSAGE;
 
 public class ChatResponseMessage implements Message, Serializable {
 
@@ -10,7 +10,7 @@ public class ChatResponseMessage implements Message, Serializable {
     private  String to;
     private  String content;
 
-    private final boolean success;
+    private final Boolean success;
     private String errorMessage;
 
     public ChatResponseMessage(String from, String to, String content) {
@@ -62,7 +62,7 @@ public class ChatResponseMessage implements Message, Serializable {
 
     @Override
     public Integer getMessageType() {
-        return CHAT_MESSAGE.getType();
+        return CHAT_RESPONSE_MESSAGE.getType();
     }
 
     @Override
