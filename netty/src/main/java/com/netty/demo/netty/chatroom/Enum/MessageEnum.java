@@ -8,6 +8,8 @@ public enum MessageEnum {
     CHAT_RESPONSE_MESSAGE(3),
     GROUP_CREATE_REQUEST_MESSAGE(4),
     GROUP_CREATE_RESPONSE_MESSAGE(5),
+    GROUP_CHAT_REQUEST_MESSAGE(6),
+    GROUP_CHAT_RESPONSE_MESSAGE(7),
     ;
 
     private Integer type;

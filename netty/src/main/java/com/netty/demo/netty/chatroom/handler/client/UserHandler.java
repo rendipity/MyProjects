@@ -1,9 +1,6 @@
 package com.netty.demo.netty.chatroom.handler.client;
 
-import com.netty.demo.netty.chatroom.message.ChatRequestMessage;
-import com.netty.demo.netty.chatroom.message.GroupCreateRequestMessage;
-import com.netty.demo.netty.chatroom.message.LoginRequestMessage;
-import com.netty.demo.netty.chatroom.message.LoginResponseMessage;
+import com.netty.demo.netty.chatroom.message.*;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
@@ -79,8 +76,9 @@ public class UserHandler extends ChannelInboundHandlerAdapter {
                             membersSet.add(loginRequestMessage.getUsername());
                             ctx.writeAndFlush(new GroupCreateRequestMessage(loginRequestMessage.getUsername(),part[1],membersSet));
                             break;
-                        /*case "gsend":
-                            ctx.writeAndFlush(new );*/
+                        case "gsend":
+                            ctx.writeAndFlush(new GroupChatRequestMessage(loginRequestMessage.getUsername(),part[1],part[2]));
+                            break;
                         case "help":
                             printHelpMenu();
                             break;
