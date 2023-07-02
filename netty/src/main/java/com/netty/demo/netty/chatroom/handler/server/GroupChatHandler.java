@@ -11,7 +11,6 @@ import io.netty.channel.SimpleChannelInboundHandler;
 
 import java.util.Set;
 
-import static com.netty.demo.netty.chatroom.Enum.ErrorResultEnum.GROUP_NOT_EXIST;
 
 @ChannelHandler.Sharable
 public class GroupChatHandler extends SimpleChannelInboundHandler<GroupChatRequestMessage> {
@@ -21,7 +20,7 @@ public class GroupChatHandler extends SimpleChannelInboundHandler<GroupChatReque
         String groupName = msg.getGroupName();
         Set<String> members = GroupSessionFactory.getMembers(groupName);
         if (members == null){
-            ctx.writeAndFlush(GroupChatResponseMessage.fail(GROUP_NOT_EXIST));
+            ctx.writeAndFlush(GroupChatResponseMessage.fail("群聊【"+groupName+"】不存在"));
             return ;
         }
         GroupChatResponseMessage groupChatResponseMessage = new GroupChatResponseMessage(msg.getFrom(), msg.getContent());

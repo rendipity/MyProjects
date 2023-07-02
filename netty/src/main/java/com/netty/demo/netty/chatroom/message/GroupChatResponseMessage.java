@@ -1,7 +1,5 @@
 package com.netty.demo.netty.chatroom.message;
 
-import com.netty.demo.netty.chatroom.Enum.ErrorResultEnum;
-
 import java.io.Serializable;
 
 import static com.netty.demo.netty.chatroom.Enum.MessageEnum.GROUP_CHAT_RESPONSE_MESSAGE;
@@ -18,8 +16,8 @@ public class GroupChatResponseMessage implements Message, Serializable {
         this.success = success;
         this.errorMessage = errorMessage;
     }
-    public static GroupChatResponseMessage fail(ErrorResultEnum errorResultEnum){
-        return new GroupChatResponseMessage(false, errorResultEnum.getMessage());
+    public static GroupChatResponseMessage fail(String errorMessage){
+        return new GroupChatResponseMessage(false, errorMessage);
     };
 
     public GroupChatResponseMessage(String from, String content) {
