@@ -8,6 +8,8 @@ import static com.netty.demo.netty.chatroom.Enum.MessageEnum.GROUP_CREATE_REQUES
 
 public class GroupCreateRequestMessage implements Message, Serializable {
 
+    private static final long serialVersionUID = -1L;
+
     private final String from;
     private final String groupName;
     private final Set<String> members;

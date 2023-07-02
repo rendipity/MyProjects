@@ -6,6 +6,8 @@ import static com.netty.demo.netty.chatroom.Enum.MessageEnum.LOGIN_RESPONSE_MESS
 
 public class LoginResponseMessage implements Message, Serializable {
 
+    private static final long serialVersionUID = -1L;
+
     private final Boolean success;
 
     private final String  message;

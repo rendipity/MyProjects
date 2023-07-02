@@ -6,6 +6,8 @@ import static com.netty.demo.netty.chatroom.Enum.MessageEnum.GROUP_CREATE_RESPON
 
 public class GroupCreateResponseMessage implements Message, Serializable {
 
+    private static final long serialVersionUID = -1L;
+
     private final Boolean success;
     private String errorMessage;
     private String from;

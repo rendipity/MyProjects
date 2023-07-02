@@ -5,7 +5,7 @@ import java.io.Serializable;
 import static com.netty.demo.netty.chatroom.Enum.MessageEnum.CHAT_REQUEST_MESSAGE;
 
 public class ChatRequestMessage implements Message, Serializable {
-
+    private static final long serialVersionUID = -1L;
     private final String from;
     private final String to;
     private final String content;
