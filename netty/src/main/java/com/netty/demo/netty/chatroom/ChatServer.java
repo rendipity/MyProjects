@@ -1,5 +1,6 @@
 package com.netty.demo.netty.chatroom;
 
+import com.netty.demo.netty.chatroom.handler.common.MyFrameDecoder;
 import com.netty.demo.netty.chatroom.handler.server.ChatRequestHandler;
 import com.netty.demo.netty.chatroom.handler.server.GroupChatHandler;
 import com.netty.demo.netty.chatroom.handler.server.GroupCreateRequestHandler;
@@ -34,6 +35,7 @@ public class ChatServer {
                         protected void initChannel(SocketChannel ch) throws Exception {
                             ChannelPipeline pipeline = ch.pipeline();
                             pipeline.addLast(LOGGINGHANDLER);
+                            pipeline.addLast(new MyFrameDecoder());
                             pipeline.addLast(LTPCODEC);
                             pipeline.addLast(new LoginHandler());
                             pipeline.addLast(CHAT_REQUEST);
