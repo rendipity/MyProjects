@@ -1,5 +1,6 @@
 package com.netty.demo.netty.chatroom.handler.client;
 
+import com.netty.demo.netty.chatroom.message.ChatRequestMessage;
 import com.netty.demo.netty.chatroom.message.LoginRequestMessage;
 import com.netty.demo.netty.chatroom.message.LoginResponseMessage;
 import io.netty.channel.ChannelHandlerContext;
@@ -56,19 +57,22 @@ public class UserHandler extends ChannelInboundHandlerAdapter {
                     ctx.channel().close();
                 }
                 printHelpMenu();
-                /*while (true){
-                     String command = s.next();
+                while (true){
+                    String command = s.nextLine();
                     boolean validate = commandValidate(command);
                     if (!validate){
                         System.out.println("操作有误，请重试");
                         continue;
                     }
-                    String[] part = command.split(" ");
+                    String[] part = command.split(" ",3);
                     switch (part[0]){
                         case "send":
-                            new
+                            ctx.writeAndFlush(new ChatRequestMessage(loginRequestMessage.getUsername(),part[1],part[2]));
+                        /*case "gsend":
+                            ctx.writeAndFlush(new );*/
+
                     }
-                }*/
+                }
             }
             private  LoginRequestMessage getUserInfo(){
                 System.out.println("请输入用户名");

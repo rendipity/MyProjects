@@ -1,5 +1,6 @@
 package com.netty.demo.netty.chatroom;
 
+import com.netty.demo.netty.chatroom.handler.server.ChatRequestHandler;
 import com.netty.demo.netty.chatroom.handler.server.LoginHandler;
 import com.netty.demo.netty.chatroom.protocal.LTPCodec;
 import io.netty.bootstrap.ServerBootstrap;
@@ -19,6 +20,7 @@ public class ChatServer {
         NioEventLoopGroup worker = new NioEventLoopGroup();
         LTPCodec LTPCODEC = new LTPCodec();
         LoggingHandler LOGGINGHANDLER = new LoggingHandler();
+        ChatRequestHandler CHAT_REQUEST = new ChatRequestHandler();
         try {
             Channel channel = new ServerBootstrap()
                     .group(boss, worker)
@@ -30,6 +32,7 @@ public class ChatServer {
                             pipeline.addLast(LOGGINGHANDLER);
                             pipeline.addLast(LTPCODEC);
                             pipeline.addLast(new LoginHandler());
+                            pipeline.addLast(CHAT_REQUEST);
                         }
                     })
                     // 主线程同步等待连接建立完成

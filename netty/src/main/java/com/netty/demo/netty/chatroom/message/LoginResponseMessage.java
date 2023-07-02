@@ -8,17 +8,19 @@ public class LoginResponseMessage implements Message, Serializable {
 
     private final Boolean success;
 
+    private final String  message;
 
-    public LoginResponseMessage(Boolean success) {
+    public LoginResponseMessage(Boolean success, String message) {
         this.success = success;
+        this.message = message;
     }
 
     public static LoginResponseMessage success(){
-        return new LoginResponseMessage(true);
+        return new LoginResponseMessage(true,"登陆成功");
     }
 
     public static LoginResponseMessage fail(){
-        return new LoginResponseMessage(false);
+        return new LoginResponseMessage(false,"用户名或者密码不正确");
     }
 
 

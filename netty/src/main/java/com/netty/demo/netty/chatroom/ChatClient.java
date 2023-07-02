@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 
 
 @Slf4j
-public class chatClient {
+public class ChatClient {
     public static void main(String[] args) {
         String URI = "localhost";
         int PORT = 8080;
