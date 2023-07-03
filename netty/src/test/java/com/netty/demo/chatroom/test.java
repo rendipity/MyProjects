@@ -1,8 +1,11 @@
 package com.netty.demo.chatroom;
 
+import com.netty.demo.netty.chatroom.Enum.SerializationAlgorithmEnum;
+import com.netty.demo.netty.chatroom.handler.common.MyFrameDecoder;
 import com.netty.demo.netty.chatroom.message.LoginRequestMessage;
 import com.netty.demo.netty.chatroom.protocal.LTPCodec;
 import com.netty.demo.netty.chatroom.serialize.JDKSerializationAlgorithm;
+import com.netty.demo.netty.chatroom.serialize.SerializationAlgorithmFactory;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.channel.embedded.EmbeddedChannel;
@@ -10,7 +13,10 @@ import io.netty.handler.logging.LoggingHandler;
 import org.junit.Test;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+
+import static com.netty.demo.netty.chatroom.Enum.SerializationAlgorithmEnum.JDK;
 
 public class test {
     
@@ -92,6 +98,40 @@ public class test {
         System.out.println(Arrays.toString(contents));
         ByteBuf byteBuf1 = byteBuf.readBytes(5);
         System.out.println(Arrays.toString(byteBuf1.toString(StandardCharsets.UTF_8).getBytes())); */
+    }
+
+
+    @Test
+    public void frameDecoderTest(){
+        final byte[] MAGIC_NUMBER= {'L','I','J','I','E'};
+        final byte VERSION = 1;
+        final SerializationAlgorithmEnum SERIALIZATION_ALGORITHM = JDK;
+        LoginRequestMessage message = new LoginRequestMessage("lijie","123456");
+        //编码
+        ByteBuf buffer =  ByteBufAllocator.DEFAULT.buffer()
+                .writeBytes(MAGIC_NUMBER) // 5
+                .writeByte(VERSION) // 1
+                .writeByte(SERIALIZATION_ALGORITHM.getAlgorithmEnumType()) // 1
+                .writeByte(message.getMessageType()) // 1
+                .writeInt(message.getSequenceId()); // 4
+        // 序列化
+        byte[] serializedMessage = SerializationAlgorithmFactory
+                .getSerializationAlgorithm(SERIALIZATION_ALGORITHM.getAlgorithmEnumType())
+                .serialize(message);
+        System.out.println(Arrays.toString(buffer.toString(StandardCharsets.UTF_8).getBytes(StandardCharsets.UTF_8)));
+        System.out.println(serializedMessage.length);
+        buffer.writeInt(serializedMessage.length); // 4
+        buffer.writeBytes(serializedMessage);
+
+        ByteBuf slice1 = buffer.slice(0, 100);
+        slice1.retain();
+        ByteBuf slice2 = buffer.slice(100, buffer.writerIndex()-100);
+        slice2.retain();
+        LTPCodec ltpCodec = new LTPCodec();
+        LoggingHandler loggingHandler = new LoggingHandler();
+        EmbeddedChannel embeddedChannel = new EmbeddedChannel(loggingHandler, new MyFrameDecoder(),ltpCodec);
+        embeddedChannel.writeInbound(slice1);
+        embeddedChannel.writeInbound(slice2);
     }
 
 

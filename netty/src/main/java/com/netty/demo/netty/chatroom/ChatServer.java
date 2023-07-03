@@ -1,10 +1,7 @@
 package com.netty.demo.netty.chatroom;
 
 import com.netty.demo.netty.chatroom.handler.common.MyFrameDecoder;
-import com.netty.demo.netty.chatroom.handler.server.ChatRequestHandler;
-import com.netty.demo.netty.chatroom.handler.server.GroupChatHandler;
-import com.netty.demo.netty.chatroom.handler.server.GroupCreateRequestHandler;
-import com.netty.demo.netty.chatroom.handler.server.LoginHandler;
+import com.netty.demo.netty.chatroom.handler.server.*;
 import com.netty.demo.netty.chatroom.protocal.LTPCodec;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
@@ -26,6 +23,7 @@ public class ChatServer {
         ChatRequestHandler CHAT_REQUEST = new ChatRequestHandler();
         GroupCreateRequestHandler GROUP_CREATE_HANDLER = new GroupCreateRequestHandler();
         GroupChatHandler GROUP_CHAT_HANDLER =  new GroupChatHandler();
+        QuitHandler QUIT_HANDLER = new QuitHandler();
         try {
             Channel channel = new ServerBootstrap()
                     .group(boss, worker)
@@ -41,6 +39,7 @@ public class ChatServer {
                             pipeline.addLast(CHAT_REQUEST);
                             pipeline.addLast(GROUP_CREATE_HANDLER);
                             pipeline.addLast(GROUP_CHAT_HANDLER);
+                            pipeline.addLast(QUIT_HANDLER);
                         }
                     })
                     // 主线程同步等待连接建立完成

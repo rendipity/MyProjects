@@ -3,6 +3,7 @@ package com.netty.demo.netty.chatroom.Session;
 import io.netty.channel.Channel;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class SessionFactory {
 
@@ -14,5 +15,14 @@ public class SessionFactory {
 
     public static Channel getByUsername(String username){
         return sessions.get(username);
+    }
+
+    public static void unbind(Channel socketChannel){
+        for(Map.Entry<String, Channel> entry:sessions.entrySet()){
+            if (entry.getValue().equals(socketChannel)){
+                sessions.remove(entry.getKey());
+                break;
+            }
+        }
     }
 }
