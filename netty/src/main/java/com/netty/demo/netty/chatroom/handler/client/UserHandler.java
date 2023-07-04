@@ -86,7 +86,7 @@ public class UserHandler extends ChannelInboundHandlerAdapter {
                             System.out.println("暂不支持----升级中");
                             break;
                         case "quit":
-
+                            ctx.channel().close();
                             break;
                         case "help":
                         printHelpMenu();

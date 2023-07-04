@@ -11,6 +11,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LoggingHandler;
+import io.netty.handler.timeout.IdleStateHandler;
 
 public class ChatServer {
     public static void main(String[] args) {
@@ -24,6 +25,8 @@ public class ChatServer {
         GroupCreateRequestHandler GROUP_CREATE_HANDLER = new GroupCreateRequestHandler();
         GroupChatHandler GROUP_CHAT_HANDLER =  new GroupChatHandler();
         QuitHandler QUIT_HANDLER = new QuitHandler();
+        UserEventHandler USER_EVENT_HANDLER = new UserEventHandler();
+        PingMessageHandler PINGMESSAGEHANDLER = new PingMessageHandler();
         try {
             Channel channel = new ServerBootstrap()
                     .group(boss, worker)
@@ -32,6 +35,8 @@ public class ChatServer {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
                             ChannelPipeline pipeline = ch.pipeline();
+                            pipeline.addLast(new IdleStateHandler(5,0,0));
+                            pipeline.addLast(USER_EVENT_HANDLER);
                             pipeline.addLast(LOGGINGHANDLER);
                             pipeline.addLast(new MyFrameDecoder());
                             pipeline.addLast(LTPCODEC);
@@ -40,6 +45,7 @@ public class ChatServer {
                             pipeline.addLast(GROUP_CREATE_HANDLER);
                             pipeline.addLast(GROUP_CHAT_HANDLER);
                             pipeline.addLast(QUIT_HANDLER);
+                            pipeline.addLast(PINGMESSAGEHANDLER);
                         }
                     })
                     // 主线程同步等待连接建立完成

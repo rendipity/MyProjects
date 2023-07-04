@@ -10,6 +10,7 @@ public enum MessageEnum {
     GROUP_CREATE_RESPONSE_MESSAGE(5),
     GROUP_CHAT_REQUEST_MESSAGE(6),
     GROUP_CHAT_RESPONSE_MESSAGE(7),
+    Ping_Message(8),
     ;
 
     private Integer type;

@@ -16,7 +16,7 @@ public class QuitHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         SessionFactory.unbind(ctx.channel());
-        log.info("{} 已经已经断开",ctx.channel());
+        log.info("{} 已经断开",ctx.channel());
     }
 
     /**
@@ -25,6 +25,6 @@ public class QuitHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         SessionFactory.unbind(ctx.channel());
-        log.info("{} 已经已经断开",ctx.channel());
+        log.info("{} 已经断开",ctx.channel());
     }
 }

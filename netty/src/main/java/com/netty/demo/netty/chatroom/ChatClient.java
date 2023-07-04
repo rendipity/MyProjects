@@ -1,5 +1,7 @@
 package com.netty.demo.netty.chatroom;
 
+import com.netty.demo.netty.chatroom.handler.client.ChannelCloseHandler;
+import com.netty.demo.netty.chatroom.handler.client.UserWriteIdelEventHandler;
 import com.netty.demo.netty.chatroom.handler.client.UserHandler;
 import com.netty.demo.netty.chatroom.handler.common.MyFrameDecoder;
 import com.netty.demo.netty.chatroom.protocal.LTPCodec;
@@ -11,6 +13,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.logging.LoggingHandler;
+import io.netty.handler.timeout.IdleStateHandler;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -22,6 +25,8 @@ public class ChatClient {
         NioEventLoopGroup work = new NioEventLoopGroup();
         LTPCodec LTPCODEC = new LTPCodec();
         LoggingHandler LOGGINGHANDLER = new LoggingHandler();
+        UserWriteIdelEventHandler USERWRITEIDELEVENTHANDLER = new UserWriteIdelEventHandler();
+        ChannelCloseHandler CHANNEL_CLOSE_HANDLER = new ChannelCloseHandler();
         try {
             Channel channel = new Bootstrap()
                     .group(work)
@@ -31,10 +36,13 @@ public class ChatClient {
                                 @Override
                                 protected void initChannel(SocketChannel ch) throws Exception {
                                     ChannelPipeline pipeline = ch.pipeline();
-                                    pipeline.addLast(LOGGINGHANDLER);
+                                    pipeline.addLast(new IdleStateHandler(0,2,0));
+                                    //pipeline.addLast(LOGGINGHANDLER);
                                     pipeline.addLast(new MyFrameDecoder());
                                     pipeline.addLast(LTPCODEC);
                                     pipeline.addLast(new UserHandler());
+                                    pipeline.addLast(USERWRITEIDELEVENTHANDLER);
+                                    pipeline.addLast(CHANNEL_CLOSE_HANDLER);
                                 }
                             }
                     ).connect(URI, PORT)
