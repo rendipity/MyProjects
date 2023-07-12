@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.publicapi.apimanage.dao.mapper.ApiParamsMapper">
+
+    <resultMap id="BaseResultMap" type="com.publicapi.apimanage.dao.DO.ApiParamsDO">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="paramName" column="param_name" jdbcType="VARCHAR"/>
+            <result property="paramType" column="param_type" jdbcType="VARCHAR"/>
+            <result property="type" column="type" jdbcType="VARCHAR"/>
+            <result property="required" column="required" jdbcType="TINYINT"/>
+            <result property="exampleValue" column="example_value" jdbcType="VARCHAR"/>
+            <result property="paramDesc" column="param_desc" jdbcType="VARCHAR"/>
+            <result property="apiCode" column="api_code" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="isDelete" column="is_delete" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,code,param_name,
+        param_type,type,required,
+        example_value,paramDesc,api_code,
+        create_time,is_delete
+    </sql>
+</mapper>
