@@ -5,6 +5,7 @@ import com.mySpring.bean.factory.xml.XMLBeanDefinitionReader;
 import com.mySpring.common.MyBeanPostProcessor;
 import org.junit.Test;
 
+
 public class BeanPostProcessorTest {
 
     @Test
