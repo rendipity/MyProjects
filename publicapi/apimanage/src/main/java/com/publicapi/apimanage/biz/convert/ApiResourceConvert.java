@@ -2,10 +2,10 @@ package com.publicapi.apimanage.biz.convert;
 
 import com.publicapi.apimanage.biz.bo.ApiResource;
 import com.publicapi.apimanage.dao.DO.ApiResourceDO;
-import com.publicapi.apimanage.web.vo.AddApiVO;
-import com.publicapi.apimanage.web.vo.DetailsApiVO;
-import com.publicapi.apimanage.web.vo.ListApiVO;
-import com.publicapi.apimanage.web.vo.UpdateApiVO;
+import com.publicapi.apimanage.web.vo.api.AddApiVO;
+import com.publicapi.apimanage.web.vo.api.DetailsApiVO;
+import com.publicapi.apimanage.web.vo.api.ListApiVO;
+import com.publicapi.apimanage.web.vo.api.UpdateApiVO;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 

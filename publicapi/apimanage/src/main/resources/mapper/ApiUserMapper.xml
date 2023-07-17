@@ -8,16 +8,24 @@
             <id property="id" column="id" jdbcType="INTEGER"/>
             <result property="username" column="username" jdbcType="VARCHAR"/>
             <result property="password" column="password" jdbcType="VARCHAR"/>
-            <result property="appkey" column="appKey" jdbcType="VARCHAR"/>
-            <result property="appsecret" column="appSecret" jdbcType="VARCHAR"/>
+            <result property="phone" column="phone" jdbcType="CHAR"/>
+            <result property="appkey" column="app_key" jdbcType="VARCHAR"/>
+            <result property="appSecret" column="app_secret" jdbcType="VARCHAR"/>
+            <result property="nickName" column="nick_Name" jdbcType="VARCHAR"/>
+            <result property="role" column="role" jdbcType="VARCHAR"/>
+            <result property="headPhoto" column="head_photo" jdbcType="VARCHAR"/>
+            <result property="invokeTimes" column="invoke_times" jdbcType="INTEGER"/>
+            <result property="totalTimes" column="total_times" jdbcType="INTEGER"/>
             <result property="status" column="status" jdbcType="VARCHAR"/>
+            <result property="lastLoginTime" column="last_login_time" jdbcType="TIMESTAMP"/>
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
-            <result property="creator" column="creator" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id,username,password,
-        appKey,appSecret,status,
-        create_time,creator
+        phone,app_key,app_secret,nickName
+        role,head_photo,invoke_times,
+        total_times,status,last_login_time,
+        create_time
     </sql>
 </mapper>

@@ -7,16 +7,16 @@ import com.publicapi.apimanage.common.CommonPage;
 import com.publicapi.apimanage.common.Result;
 import com.publicapi.apimanage.common.qto.ApiEvent;
 import com.publicapi.apimanage.common.qto.ApiPageQuery;
-import com.publicapi.apimanage.web.vo.AddApiVO;
-import com.publicapi.apimanage.web.vo.DetailsApiVO;
-import com.publicapi.apimanage.web.vo.ListApiVO;
-import com.publicapi.apimanage.web.vo.UpdateApiVO;
+import com.publicapi.apimanage.web.vo.api.AddApiVO;
+import com.publicapi.apimanage.web.vo.api.DetailsApiVO;
+import com.publicapi.apimanage.web.vo.api.ListApiVO;
+import com.publicapi.apimanage.web.vo.api.UpdateApiVO;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
 @RestController
-@RequestMapping("/apiManage")
+@RequestMapping("/api")
 public class ApiController {
 
     @Resource
@@ -79,4 +79,5 @@ public class ApiController {
     public Result<Boolean> removeApi(String apiCode){
         return Result.success(apiService.removeApi(apiCode));
     }
+
 }

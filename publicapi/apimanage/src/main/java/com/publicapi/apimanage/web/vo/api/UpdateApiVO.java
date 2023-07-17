@@ -1,14 +1,18 @@
-package com.publicapi.apimanage.web.vo;
+package com.publicapi.apimanage.web.vo.api;
 
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-public class AddApiVO {
+public class UpdateApiVO {
 
     /**
-     * api名称
+     *
+     */
+    private String code;
+    /**
+     *
      */
     private String name;
 
@@ -43,7 +47,7 @@ public class AddApiVO {
     private String groupCode;
 
     /**
-     * 调用频率
+     *
      */
     private Integer callFrequency;
 
@@ -57,6 +61,7 @@ public class AddApiVO {
      */
     private String responseDemo;
 
+
     /**
      * 请求参数
      */
@@ -66,5 +71,4 @@ public class AddApiVO {
      * 响应参数
      */
     private List<ApiParamsVO> responseParams;
-
 }

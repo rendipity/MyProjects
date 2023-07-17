@@ -1,11 +1,11 @@
-package com.publicapi.apimanage.web.vo;
+package com.publicapi.apimanage.web.vo.api;
 
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-public class UpdateApiVO {
+public class DetailsApiVO {
 
     /**
      *
@@ -39,7 +39,7 @@ public class UpdateApiVO {
     /**
      *
      */
-    private String path;
+    private String uri;
 
     /**
      *
