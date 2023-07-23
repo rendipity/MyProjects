@@ -1,7 +1,7 @@
 package com.publicapi.apimanage.dao.repository;
 
-import com.publicapi.apimanage.dao.DO.ApiParamsDO;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.publicapi.apimanage.dao.DO.ApiParamsDO;
 
 /**
 * @author chenxinyu

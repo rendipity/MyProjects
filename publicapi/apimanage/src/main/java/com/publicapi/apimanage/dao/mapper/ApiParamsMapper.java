@@ -1,7 +1,7 @@
 package com.publicapi.apimanage.dao.mapper;
 
-import com.publicapi.apimanage.dao.DO.ApiParamsDO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.publicapi.apimanage.dao.DO.ApiParamsDO;
 
 /**
 * @author chenxinyu
