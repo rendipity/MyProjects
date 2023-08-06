@@ -11,4 +11,6 @@ import com.publicapi.apimanage.dao.DO.ApiResourceDO;
 public interface ApiResourceRepository extends IService<ApiResourceDO> {
 
     ApiResourceDO getByCode(String code);
+
+    ApiResourceDO getOne(String protocol, String host, String path);
 }

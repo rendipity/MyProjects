@@ -1,6 +1,8 @@
 package com.publicapi.apimanage.biz.service.impl;
 
 import cn.hutool.core.lang.Assert;
+import cn.hutool.core.util.ObjectUtil;
+import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.publicapi.apimanage.biz.bo.ApiParams;
@@ -58,6 +60,8 @@ public class ApiServiceImpl implements ApiService {
 
     @Override
     public String createApi(ApiResource apiResource) {
+        // 判断url是否重复
+        checkUrl(apiResource);
         String code = generateCode();
         apiResource.setCode(code);
         apiResource.setCreateTime(new Date());
@@ -176,5 +180,10 @@ public class ApiServiceImpl implements ApiService {
             apiResourceDO = apiResourceRepository.getByCode(code);
         }
         return code;
+    }
+    private void checkUrl(ApiResource apiResource){
+        ApiResourceDO api = apiResourceRepository.getOne(apiResource.getProtocol(), apiResource.getHost(), apiResource.getPath());
+        if (ObjectUtil.isNotNull(api))
+            throw new ApiResourceException(URL_DUPLICATION);
     }
 }

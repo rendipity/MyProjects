@@ -19,6 +19,15 @@ public class ApiResourceRepositoryImpl extends ServiceImpl<ApiResourceMapper, Ap
     public ApiResourceDO getByCode(String code) {
         return getOne(Wrappers.<ApiResourceDO>lambdaQuery().eq(ApiResourceDO::getCode,code));
     }
+
+    @Override
+    public ApiResourceDO getOne(String protocol, String host, String path) {
+        return getOne(Wrappers.<ApiResourceDO>lambdaQuery()
+                .eq(ApiResourceDO::getHost,host)
+                .eq(ApiResourceDO::getPath,path)
+                .eq(ApiResourceDO::getProtocol,protocol)
+                );
+    }
 }
 
 
