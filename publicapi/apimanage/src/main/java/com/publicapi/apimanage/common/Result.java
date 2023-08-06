@@ -16,6 +16,7 @@ public class Result <T> {
     }
 
     public Result(String errorCode, String errorMsg) {
+        this.success = false;
         this.errorCode = errorCode;
         this.errorMsg = errorMsg;
     }
