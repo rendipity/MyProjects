@@ -1,0 +1,16 @@
+spring:
+  application:
+    # 服务提供者的名称
+    name: api-manager
+  cloud:
+    nacos:
+      discovery:
+        # 启动Nacos的地址
+        server-addr: 127.0.0.1:8848
+        # 在Nacos页面建的命名空间
+        # namespace: 56d98d62-6bbf-46d8-8e2a-f52c49c4798d
+      config:
+        server-addr: ${spring.cloud.nacos.discovery.server-addr}
+        group: provider
+        # namespace: ${spring.cloud.nacos.discovery.namespace}
+        # file-extension: yaml

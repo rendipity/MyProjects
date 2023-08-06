@@ -1,5 +1,5 @@
 import com.publicapi.apimanage.ApplicationStarter;
-import com.publicapi.apimanage.core.service.OssService;
+import com.publicapi.apimanage.core.service.oss.OssService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;

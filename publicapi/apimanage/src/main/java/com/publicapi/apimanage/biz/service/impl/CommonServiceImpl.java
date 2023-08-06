@@ -2,7 +2,7 @@ package com.publicapi.apimanage.biz.service.impl;
 
 import cn.hutool.core.util.IdUtil;
 import com.publicapi.apimanage.biz.service.CommonService;
-import com.publicapi.apimanage.core.service.OssService;
+import com.publicapi.apimanage.core.service.oss.OssService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

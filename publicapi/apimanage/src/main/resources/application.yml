@@ -15,3 +15,5 @@ aliyun:
   oss:
     endpoint: https://oss-cn-hangzhou.aliyuncs.com
     bucketName: lijie-openapi
+
+  message: dysmsapi.aliyuncs.com

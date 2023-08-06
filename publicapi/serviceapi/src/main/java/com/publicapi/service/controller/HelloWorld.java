@@ -1,5 +1,6 @@
 package com.publicapi.service.controller;
 
+import com.publicapi.service.controller.modal.Student;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,7 +10,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class HelloWorld {
 
     @GetMapping("/hello")
-    public String helloworld(String name){
+    public String helloWorld(String name){
         return "hello, "+name;
+    }
+    @GetMapping("/student")
+    public Student getStudent(String id){
+        return new Student(id,"lijie",22);
     }
 }

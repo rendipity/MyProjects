@@ -1,4 +1,4 @@
-package com.publicapi.apimanage.core.service;
+package com.publicapi.apimanage.core.service.oss;
 
 public interface OssService {
 
