@@ -14,6 +14,7 @@ import com.publicapi.apimanage.biz.statemachine.ApiStateMachine;
 import com.publicapi.apimanage.common.CommonPage;
 import com.publicapi.apimanage.common.exception.ApiResourceException;
 import com.publicapi.apimanage.common.qto.ApiEvent;
+import com.publicapi.apimanage.common.qto.ApiListQuery;
 import com.publicapi.apimanage.common.qto.ApiPageQuery;
 import com.publicapi.apimanage.common.utils.CodeUtil;
 import com.publicapi.apimanage.dao.DO.ApiParamsDO;
@@ -134,6 +135,12 @@ public class ApiServiceImpl implements ApiService {
                 Wrappers.<ApiResourceDO>lambdaQuery()
                         .eq(ApiResourceDO::getGroupCode, apiPageQuery.getGroupCode()));
         return CommonPage.build(pageNum,pageSize,pageResult.getPages(),pageResult.getTotal(),apiResourceConvert.listDo2modal(pageResult.getRecords()));
+    }
+
+    @Override
+    public List<ApiResource> listApi(ApiListQuery apiListQuery) {
+        List<ApiResourceDO> apiResourceDOS = apiResourceRepository.listApi(apiListQuery.getStatus());
+        return apiResourceConvert.listDo2modal(apiResourceDOS);
     }
 
     @Override

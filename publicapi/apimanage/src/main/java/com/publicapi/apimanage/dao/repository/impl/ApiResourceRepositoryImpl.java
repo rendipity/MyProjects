@@ -1,11 +1,14 @@
 package com.publicapi.apimanage.dao.repository.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.publicapi.apimanage.dao.DO.ApiResourceDO;
 import com.publicapi.apimanage.dao.mapper.ApiResourceMapper;
 import com.publicapi.apimanage.dao.repository.ApiResourceRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
 * @author chenxinyu
@@ -27,6 +30,13 @@ public class ApiResourceRepositoryImpl extends ServiceImpl<ApiResourceMapper, Ap
                 .eq(ApiResourceDO::getPath,path)
                 .eq(ApiResourceDO::getProtocol,protocol)
                 );
+    }
+
+    @Override
+    public List<ApiResourceDO> listApi(String status) {
+        List<ApiResourceDO> resourceDOS = list(Wrappers.<ApiResourceDO>lambdaQuery()
+                .eq(StrUtil.isNotBlank(status), ApiResourceDO::getStatus, status));
+        return resourceDOS;
     }
 }
 

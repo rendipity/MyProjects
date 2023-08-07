@@ -1,7 +1,6 @@
-import com.publicapi.apimanage.ApplicationStarter;
+import com.publicapi.apimanage.ApiManageApplicationStarter;
 import com.publicapi.apimanage.biz.service.UserService;
 import com.publicapi.apimanage.core.enums.MessageEnum;
-import com.publicapi.apimanage.core.service.message.MessageService;
 import com.publicapi.apimanage.core.service.message.impl.MessageServiceImpl;
 import com.publicapi.apimanage.core.template.AuthCodeTemplateParam;
 import org.junit.Test;
@@ -11,8 +10,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
 
-
-@SpringBootTest(classes = ApplicationStarter.class)
+@SpringBootTest(classes = ApiManageApplicationStarter.class)
 @RunWith(SpringRunner.class)
 public class MessageTest {
 

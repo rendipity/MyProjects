@@ -3,7 +3,10 @@ package com.publicapi.apimanage.biz.service;
 import com.publicapi.apimanage.biz.bo.ApiResource;
 import com.publicapi.apimanage.common.CommonPage;
 import com.publicapi.apimanage.common.qto.ApiEvent;
+import com.publicapi.apimanage.common.qto.ApiListQuery;
 import com.publicapi.apimanage.common.qto.ApiPageQuery;
+
+import java.util.List;
 
 public interface ApiService {
 
@@ -21,6 +24,11 @@ public interface ApiService {
      * 根据group 查询api列表
      */
     public CommonPage<ApiResource> pageApi(ApiPageQuery apiPageQuery);
+
+    /**
+     * 获取所有可用的api列表
+     */
+    List<ApiResource> listApi(ApiListQuery apiListQuery);
     /**
      * api详情
      */
