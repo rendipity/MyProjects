@@ -1,4 +1,4 @@
-package com.publicapi.modal;
+package com.publicapi.modal.api;
 
 import lombok.Data;
 

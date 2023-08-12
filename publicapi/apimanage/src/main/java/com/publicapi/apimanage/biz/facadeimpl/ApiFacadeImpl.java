@@ -5,7 +5,7 @@ import com.publicapi.apimanage.biz.convert.ApiResourceConvert;
 import com.publicapi.apimanage.biz.service.ApiService;
 import com.publicapi.apimanage.common.qto.ApiListQuery;
 import com.publicapi.facade.ApiFacade;
-import com.publicapi.modal.ApiResourceDTO;
+import com.publicapi.modal.api.ApiResourceDTO;
 import org.apache.dubbo.config.annotation.DubboService;
 
 import javax.annotation.Resource;

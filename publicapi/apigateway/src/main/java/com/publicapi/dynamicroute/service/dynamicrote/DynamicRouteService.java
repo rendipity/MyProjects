@@ -5,7 +5,7 @@ import cn.hutool.core.util.IdUtil;
 import com.publicapi.dynamicroute.apimodal.ApiResource;
 import com.publicapi.dynamicroute.dubboclient.ApiClient;
 import com.publicapi.dynamicroute.service.dynamicrote.convert.ApiResourceConvert;
-import com.publicapi.modal.ApiResourceDTO;
+import com.publicapi.modal.api.ApiResourceDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.event.RefreshRoutesEvent;
 import org.springframework.cloud.gateway.filter.FilterDefinition;
@@ -64,6 +64,7 @@ public class DynamicRouteService{
         Map<String,String> pathPredicateParams = new HashMap<>();
         String path = "/"+apiResource.getCode()+apiResource.getPath();
         //String path = "/testApi/serviceapi/hello";
+        // 参数名并没有任何意义
         pathPredicateParams.put("_genkey_0",path);
         pathPredicate.setArgs(pathPredicateParams);
         PredicateDefinition methodPredicate = new PredicateDefinition();
@@ -71,7 +72,7 @@ public class DynamicRouteService{
         Map<String,String> methodPredicateParams = new HashMap<>();
         //String httpMethod = "GET";
         String httpMethod = apiResource.getHttpMethod();
-        methodPredicateParams.put("_genkey_0", httpMethod);
+        methodPredicateParams.put("_genkey_0", httpMethod.toUpperCase());
         methodPredicate.setArgs(methodPredicateParams);
         routeDefinition.setPredicates(Stream.of(pathPredicate,methodPredicate).collect(Collectors.toList()));
         //routeDefinition.setPredicates(Stream.of(pathPredicate).collect(Collectors.toList()));

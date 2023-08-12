@@ -28,7 +28,7 @@ public class ApiController {
     /**
      * 新增api
      */
-        @PostMapping("/create")
+    @PostMapping("/create")
     public Result<String> createApi(@RequestBody AddApiVO addApiVO){
             ApiResource apiResource = apiResourceConvert.addVo2modal(addApiVO);
             return Result.success(apiService.createApi(apiResource));

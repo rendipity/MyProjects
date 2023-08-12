@@ -1,6 +1,6 @@
 package com.publicapi.dynamicroute.dubboclient;
 
-import com.publicapi.modal.ApiResourceDTO;
+import com.publicapi.modal.api.ApiResourceDTO;
 
 import java.util.List;
 

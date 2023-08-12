@@ -1,24 +1,20 @@
 import com.publicapi.apimanage.ApiManageApplicationStarter;
-import com.publicapi.facade.ApiFacade;
-import com.publicapi.modal.api.ApiResourceDTO;
+import com.publicapi.apimanage.core.service.mq.MqService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 @SpringBootTest(classes = ApiManageApplicationStarter.class)
 @RunWith(SpringRunner.class)
-public class DubboTest {
+public class MqTest {
 
     @Resource
-    private ApiFacade apiFacade;
+    MqService mqService;
     @Test
-    public void listApiTest(){
-        List<ApiResourceDTO> apiResourceDTOS = apiFacade.listApi();
-        apiResourceDTOS.forEach(System.out::println);
+    public void mqTest(){
+        mqService.sendMqMessage("test","hello world from apiManage");
     }
-
 }

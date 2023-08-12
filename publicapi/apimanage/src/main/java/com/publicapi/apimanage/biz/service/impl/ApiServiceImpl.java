@@ -17,6 +17,7 @@ import com.publicapi.apimanage.common.qto.ApiEvent;
 import com.publicapi.apimanage.common.qto.ApiListQuery;
 import com.publicapi.apimanage.common.qto.ApiPageQuery;
 import com.publicapi.apimanage.common.utils.CodeUtil;
+import com.publicapi.apimanage.core.service.mq.MqService;
 import com.publicapi.apimanage.dao.DO.ApiParamsDO;
 import com.publicapi.apimanage.dao.DO.ApiResourceDO;
 import com.publicapi.apimanage.dao.repository.ApiParamsRepository;
@@ -34,6 +35,7 @@ import java.util.stream.Stream;
 import static com.publicapi.apimanage.common.Constants.REQUEST;
 import static com.publicapi.apimanage.common.Constants.RESPONSE;
 import static com.publicapi.apimanage.common.enums.ErrorResultEnum.*;
+import static com.publicapi.modal.mq.RabbitMqConstants.*;
 
 @Service
 public class ApiServiceImpl implements ApiService {
@@ -43,26 +45,30 @@ public class ApiServiceImpl implements ApiService {
     private final String CREATOR = "lijie";
 
     @Resource
-    ApiResourceConvert apiResourceConvert;
+    private ApiResourceConvert apiResourceConvert;
     @Resource
-    ApiParamsConvert paramsConvert;
+    private ApiParamsConvert paramsConvert;
 
     @Resource
-    ApiResourceRepository apiResourceRepository;
+    private ApiResourceRepository apiResourceRepository;
 
     @Resource
-    ApiParamsRepository paramsRepository;
+    private ApiParamsRepository paramsRepository;
 
     @Resource
-    TransactionTemplate transactionTemplate;
+    private TransactionTemplate transactionTemplate;
 
     @Resource
-    ApiStateMachine stateMachine;
+    private ApiStateMachine stateMachine;
+
+    @Resource
+    private MqService mqService;
 
     @Override
     public String createApi(ApiResource apiResource) {
         // 判断url是否重复
         checkUrl(apiResource);
+        // todo 校验该api是否可以调用成功
         String code = generateCode();
         apiResource.setCode(code);
         apiResource.setCreateTime(new Date());
@@ -90,6 +96,8 @@ public class ApiServiceImpl implements ApiService {
             // 批量插入 apiParams
             paramsRepository.saveBatch(params);
         });
+        // 发送消息
+        mqService.sendMqMessage(ADD_ROUTE_MESSAGE,apiResourceConvert.modal2Dto(apiResource));
         return code;
     }
 
@@ -124,6 +132,7 @@ public class ApiServiceImpl implements ApiService {
             //增加新的params
             paramsRepository.saveBatch(params);
         });
+        mqService.sendMqMessage(UPDATE_ROUTE_MESSAGE,apiResourceConvert.modal2Dto(apiResource));
         return true;
     }
 
@@ -162,12 +171,17 @@ public class ApiServiceImpl implements ApiService {
         ApiResourceDO apiResourceDO = apiResourceRepository.getByCode(event.getCode());
         Assert.notNull(apiResourceDO,()->new ApiResourceException(API_NOT_EXIST));
         Assert.equals(apiResourceDO.getStatus(),event.getStatus(),()->new ApiResourceException(ABNORMAL_STATE));
-        return apiResourceRepository.update(
+        boolean updateResult = apiResourceRepository.update(
                 Wrappers.<ApiResourceDO>lambdaUpdate()
-                        .eq(ApiResourceDO::getCode,event.getCode())
-                        .eq(ApiResourceDO::getStatus,event.getStatus())
-                        .set(ApiResourceDO::getStatus,nextStatus)
+                        .eq(ApiResourceDO::getCode, event.getCode())
+                        .eq(ApiResourceDO::getStatus, event.getStatus())
+                        .set(ApiResourceDO::getStatus, nextStatus)
         );
+        ApiResource apiResource = apiResourceConvert.do2Modal(apiResourceDO);
+        // todo 并发情况下是否有问题
+        apiResource.setStatus(event.getStatus());
+        mqService.sendMqMessage(STATUS_CHANGED_ROUTE_MESSAGE, apiResourceConvert.modal2Dto(apiResource));
+        return updateResult;
     }
 
     @Override
@@ -177,6 +191,7 @@ public class ApiServiceImpl implements ApiService {
                     .eq(ApiResourceDO::getCode,apiCode));
             paramsRepository.removeParams(apiCode);
         });
+        mqService.sendMqMessage(REMOVE_ROUTE_MESSAGE,apiCode);
         return true;
     }
     private String generateCode(){

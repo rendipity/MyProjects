@@ -1,7 +1,7 @@
 package com.publicapi.dynamicroute.service.dynamicrote.convert;
 
 import com.publicapi.dynamicroute.apimodal.ApiResource;
-import com.publicapi.modal.ApiResourceDTO;
+import com.publicapi.modal.api.ApiResourceDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 

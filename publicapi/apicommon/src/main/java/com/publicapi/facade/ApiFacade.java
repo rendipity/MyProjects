@@ -1,6 +1,6 @@
 package com.publicapi.facade;
 
-import com.publicapi.modal.ApiResourceDTO;
+import com.publicapi.modal.api.ApiResourceDTO;
 
 import java.util.List;
 

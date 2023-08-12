@@ -6,7 +6,7 @@ import com.publicapi.apimanage.web.vo.api.AddApiVO;
 import com.publicapi.apimanage.web.vo.api.DetailsApiVO;
 import com.publicapi.apimanage.web.vo.api.ListApiVO;
 import com.publicapi.apimanage.web.vo.api.UpdateApiVO;
-import com.publicapi.modal.ApiResourceDTO;
+import com.publicapi.modal.api.ApiResourceDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 
