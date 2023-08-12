@@ -8,13 +8,14 @@ spring:
     gateway:
       routes:
         ###路由id
-       # - id: hello-router
+        - id: hello-router
           ####转发http://www.gblfy.com/
-       #   uri: http://localhost:8001/hello
+          uri: http://localhost:8001/serviceapi/hello
           ###匹配规则
-       #   predicates:
-       #    - Path= /**
-#dubbo
+          predicates:
+           - Path=/serviceapi/hello
+           - Method=GET
+             #dubbo
 dubbo:
   application:
     name: ${spring.application.name}

@@ -4,10 +4,9 @@ package com.publicapi.dynamicroute.service.dynamicrote;
 import cn.hutool.core.util.IdUtil;
 import com.publicapi.dynamicroute.apimodal.ApiResource;
 import com.publicapi.dynamicroute.dubboclient.ApiClient;
+import com.publicapi.dynamicroute.service.dynamicrote.convert.ApiResourceConvert;
 import com.publicapi.modal.ApiResourceDTO;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.cloud.gateway.event.RefreshRoutesEvent;
 import org.springframework.cloud.gateway.filter.FilterDefinition;
 import org.springframework.cloud.gateway.handler.predicate.PredicateDefinition;
@@ -28,7 +27,7 @@ import java.util.stream.Stream;
 
 @Slf4j
 @Service
-public class DynamicRouteService implements BeanPostProcessor {
+public class DynamicRouteService{
 
     @Resource
     private RouteDefinitionWriter routeDefinitionWriter;
@@ -39,23 +38,26 @@ public class DynamicRouteService implements BeanPostProcessor {
     @Resource
     private ApiClient apiClient;
 
+    @Resource
+    private ApiResourceConvert apiResourceConvert;
+
     public void init(){
-        ApiResource api =new ApiResource();
-        api.setCode("testApi");
-        api.setHost("http://localhost:8001");
-        api.setHttpMethod("GET");
-        api.setPath("/serviceapi/hello");
-        addRoute(api);
+        log.info("init 执行了");
+        List<ApiResourceDTO> apiResourceDTOS = apiClient.listApiResource();
+        apiResourceDTOS.forEach(apiDto->{
+            addRoute(apiResourceConvert.dto2modal(apiDto));
+        });
     }
 
     public void  addRoute(ApiResource apiResource){
-        RouteDefinition definition = new RouteDefinition();
+        RouteDefinition routeDefinition = new RouteDefinition();
         // route id
-        definition.setId(IdUtil.simpleUUID());
+        routeDefinition.setId(IdUtil.simpleUUID());
         // uri
         //URI uri = UriComponentsBuilder.fromHttpUrl("http://localhost:8001").build().toUri();
-        URI uri = UriComponentsBuilder.fromHttpUrl(apiResource.getHost()).build().toUri();
-        definition.setUri(uri);
+        String url = apiResource.getProtocol()+"://"+apiResource.getHost();
+        URI uri = UriComponentsBuilder.fromHttpUrl(url).build().toUri();
+        routeDefinition.setUri(uri);
         // predicate
         PredicateDefinition pathPredicate = new PredicateDefinition();
         pathPredicate.setName("Path");
@@ -71,30 +73,19 @@ public class DynamicRouteService implements BeanPostProcessor {
         String httpMethod = apiResource.getHttpMethod();
         methodPredicateParams.put("_genkey_0", httpMethod);
         methodPredicate.setArgs(methodPredicateParams);
-        definition.setPredicates(Stream.of(pathPredicate,methodPredicate).collect(Collectors.toList()));
+        routeDefinition.setPredicates(Stream.of(pathPredicate,methodPredicate).collect(Collectors.toList()));
+        //routeDefinition.setPredicates(Stream.of(pathPredicate).collect(Collectors.toList()));
         // filter
         FilterDefinition filter = new FilterDefinition();
         filter.setName("StripPrefix");
         Map<String,String> filterParam = new HashMap<>();
         filterParam.put("_genkey_0","1");
         filter.setArgs(filterParam);
-        definition.setFilters(Stream.of(filter).collect(Collectors.toList()));
-        routeDefinitionWriter.save(Mono.just(definition)).subscribe();
+        routeDefinition.setFilters(Stream.of(filter).collect(Collectors.toList()));
+        routeDefinitionWriter.save(Mono.just(routeDefinition)).subscribe();
         // 刷新网关路由配置 生效---
         //log.info("刷新网关");
         this.publisher.publishEvent(new RefreshRoutesEvent(this));
-        log.info("不刷新网关");
         log.info("addRouteSuccess");
-    }
-
-    @Override
-    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        log.info("initializeBean 执行了");
-        List<ApiResourceDTO> apiResourceDTOS = apiClient.listApiResource();
-        apiResourceDTOS.forEach(System.out::println);
-        return BeanPostProcessor.super.postProcessAfterInitialization(bean, beanName);
-    }
-
-    public void afterPropertiesSet() throws Exception {
     }
 }
