@@ -2,6 +2,7 @@ package com.publicapi.apimanage.biz.service.impl;
 
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.publicapi.apimanage.biz.bo.ApiParams;
@@ -138,7 +139,7 @@ public class ApiServiceImpl implements ApiService {
         Integer pageSize = apiPageQuery.getPageSize();
         Page<ApiResourceDO> pageResult = apiResourceRepository.page(new Page<>(pageNum, pageSize),
                 Wrappers.<ApiResourceDO>lambdaQuery()
-                        .eq(ApiResourceDO::getGroupCode, apiPageQuery.getGroupCode()));
+                        .eq(StrUtil.isNotBlank(apiPageQuery.getGroupCode()),ApiResourceDO::getGroupCode, apiPageQuery.getGroupCode()));
         return CommonPage.build(pageNum,pageSize,pageResult.getPages(),pageResult.getTotal(),apiResourceConvert.listDo2modal(pageResult.getRecords()));
     }
 
