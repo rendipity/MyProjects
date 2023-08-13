@@ -175,7 +175,7 @@ public class ApiServiceImpl implements ApiService {
         );
         ApiResource apiResource = apiResourceConvert.do2Modal(apiResourceDO);
         // todo 并发情况下是否有问题
-        apiResource.setStatus(event.getStatus());
+        apiResource.setStatus(nextStatus);
         mqService.sendMqMessage(STATUS_CHANGED_ROUTE_MESSAGE, apiResourceConvert.modal2Dto(apiResource));
         return updateResult;
     }

@@ -8,9 +8,11 @@ import com.publicapi.modal.api.ApiResourceDTO;
 import com.publicapi.modal.mq.MQMessage;
 import com.publicapi.modal.mq.RabbitMqConstants;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 
+@Component
 public class RemoveRouteMessageStrategy implements RouteMessageStrategy, InitializingBean {
 
     @Resource
