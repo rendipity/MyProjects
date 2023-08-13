@@ -28,4 +28,12 @@ public class CommonPage <T> {
     public static <T> CommonPage<T> build(Integer pageNum, Integer pageSize, Long totalPage, Long total, List<T> lists){
        return new CommonPage<>(pageNum, pageSize, totalPage, total, lists);
     }
+
+    public static <T,U> CommonPage<U> convert(CommonPage<T> commonPage,List<U> list){
+        return CommonPage.build(commonPage.getPageNum(),
+                commonPage.getPageSize(),
+                commonPage.getTotalPage(),
+                commonPage.getTotal(),
+                list);
+    }
 }

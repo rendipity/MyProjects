@@ -1,5 +1,6 @@
 package com.publicapi.apimanage.web.controller;
 
+import com.aliyun.teautil.Common;
 import com.publicapi.apimanage.biz.bo.ApiResource;
 import com.publicapi.apimanage.biz.convert.ApiResourceConvert;
 import com.publicapi.apimanage.biz.service.ApiService;
@@ -48,11 +49,7 @@ public class ApiController {
     @PostMapping("/list")
     public Result<CommonPage<ListApiVO>> pageApi(@RequestBody ApiPageQuery apiPageQuery){
         CommonPage<ApiResource> apiCommonPage = apiService.pageApi(apiPageQuery);
-        CommonPage<ListApiVO> resultData = CommonPage.build(apiCommonPage.getPageNum(),
-                apiCommonPage.getPageSize(),
-                apiCommonPage.getTotalPage(),
-                apiCommonPage.getTotal(),
-                apiResourceConvert.listModal2Vo(apiCommonPage.getLists()));
+        CommonPage<ListApiVO> resultData= CommonPage.convert(apiCommonPage,apiResourceConvert.listModal2Vo(apiCommonPage.getLists()));
         return Result.success(resultData);
     }
 
