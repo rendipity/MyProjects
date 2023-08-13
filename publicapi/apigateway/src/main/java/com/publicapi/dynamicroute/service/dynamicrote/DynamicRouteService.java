@@ -13,6 +13,7 @@ import org.springframework.cloud.gateway.handler.predicate.PredicateDefinition;
 import org.springframework.cloud.gateway.route.RouteDefinition;
 import org.springframework.cloud.gateway.route.RouteDefinitionWriter;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
@@ -27,7 +28,7 @@ import java.util.stream.Stream;
 
 @Slf4j
 @Service
-public class DynamicRouteService{
+public class DynamicRouteService implements ApplicationEventPublisherAware {
 
     @Resource
     private RouteDefinitionWriter routeDefinitionWriter;
@@ -41,6 +42,11 @@ public class DynamicRouteService{
     @Resource
     private ApiResourceConvert apiResourceConvert;
 
+    @Override
+    public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
+        this.publisher = applicationEventPublisher;
+    }
+
     public void init(){
         log.info("init 执行了");
         List<ApiResourceDTO> apiResourceDTOS = apiClient.listApiResource();
@@ -52,7 +58,8 @@ public class DynamicRouteService{
     public void  addRoute(ApiResource apiResource){
         RouteDefinition routeDefinition = new RouteDefinition();
         // route id
-        routeDefinition.setId(IdUtil.simpleUUID());
+        String simpleUUID = IdUtil.simpleUUID();
+        routeDefinition.setId(simpleUUID);
         // uri
         //URI uri = UriComponentsBuilder.fromHttpUrl("http://localhost:8001").build().toUri();
         String url = apiResource.getProtocol()+"://"+apiResource.getHost();
@@ -87,6 +94,15 @@ public class DynamicRouteService{
         // 刷新网关路由配置 生效---
         //log.info("刷新网关");
         this.publisher.publishEvent(new RefreshRoutesEvent(this));
-        log.info("addRouteSuccess");
+        log.info("addRoute success!");
+        log.info("apiResource info: {}", apiResource);
+        log.info("route info routeId:{}, url:{}",simpleUUID,url);
     }
+
+    public void  removeRoute(String routeId){
+        routeDefinitionWriter.delete(Mono.just(routeId)).subscribe();
+        this.publisher.publishEvent(new RefreshRoutesEvent(this));
+        log.info("remove Route success! route id: {}",routeId);
+    }
+
 }

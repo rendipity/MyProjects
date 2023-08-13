@@ -11,86 +11,34 @@ import java.util.List;
  */
 @Data
 public class ApiResource {
-    /**
-     * 
-     */
-    private Integer id;
 
     /**
-     * 
+     * api编码
      */
     private String code;
 
     /**
-     * 
-     */
-    private String name;
-
-    /**
-     *
-     */
-    private String description;
-    /**
-     * 
+     * http请求类型 GET、POST
      */
     private String httpMethod;
 
     /**
-     * 
+     * 协议 目前支持http、https
      */
     private String protocol;
 
     /**
-     * 
+     * 主机名
      */
     private String host;
 
     /**
-     * 
+     * url path
      */
     private String path;
 
     /**
-     *
-     */
-    private String groupCode;
-
-    /**
-     *
+     * 调用频率
      */
     private Integer callFrequency;
-    /**
-     * 
-     */
-    private String requestDemo;
-
-    /**
-     * 
-     */
-    private String responseDemo;
-
-    /**
-     *请求参数
-     */
-    private List<ApiParams> requestParams;
-
-    /**
-     *响应参数
-     */
-    private List<ApiParams> responseParams;
-
-    /**
-     * 
-     */
-    private Date createTime;
-
-    /**
-     * 
-     */
-    private String creator;
-
-    /**
-     * 
-     */
-    private String status;
 }
