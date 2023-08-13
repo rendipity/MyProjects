@@ -2,7 +2,6 @@ package com.publicapi.apimanage.biz.service.impl;
 
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ObjectUtil;
-import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.publicapi.apimanage.biz.bo.ApiParams;
@@ -31,16 +30,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static com.publicapi.apimanage.common.Constants.REQUEST;
-import static com.publicapi.apimanage.common.Constants.RESPONSE;
 import static com.publicapi.apimanage.common.enums.ErrorResultEnum.*;
+import static com.publicapi.constants.APIConstants.REQUEST;
+import static com.publicapi.constants.APIConstants.RESPONSE;
 import static com.publicapi.modal.mq.RabbitMqConstants.*;
 
 @Service
 public class ApiServiceImpl implements ApiService {
-
-    private final String ENABLE_STATUS = "enable";
 
     private final String CREATOR = "lijie";
 

@@ -1,6 +1,6 @@
-package com.publicapi.apimanage.common;
+package com.publicapi.constants;
 
-public class Constants {
+public class APIConstants {
     public static final String REQUEST = "request";
     public static final String RESPONSE = "response";
 

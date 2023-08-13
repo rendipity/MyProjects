@@ -11,7 +11,8 @@ import org.apache.dubbo.config.annotation.DubboService;
 import javax.annotation.Resource;
 import java.util.List;
 
-import static com.publicapi.apimanage.common.Constants.ENABLE;
+import static com.publicapi.constants.APIConstants.ENABLE;
+
 
 @DubboService
 public class ApiFacadeImpl implements ApiFacade {

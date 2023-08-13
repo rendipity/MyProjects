@@ -1,7 +1,6 @@
 package com.publicapi.dynamicroute.service.dynamicrote;
 
 
-import cn.hutool.core.util.IdUtil;
 import com.publicapi.dynamicroute.apimodal.ApiResource;
 import com.publicapi.dynamicroute.dubboclient.ApiClient;
 import com.publicapi.dynamicroute.service.dynamicrote.convert.ApiResourceConvert;
@@ -58,8 +57,7 @@ public class DynamicRouteService implements ApplicationEventPublisherAware {
     public void  addRoute(ApiResource apiResource){
         RouteDefinition routeDefinition = new RouteDefinition();
         // route id
-        String simpleUUID = IdUtil.simpleUUID();
-        routeDefinition.setId(simpleUUID);
+        routeDefinition.setId(apiResource.getCode());
         // uri
         //URI uri = UriComponentsBuilder.fromHttpUrl("http://localhost:8001").build().toUri();
         String url = apiResource.getProtocol()+"://"+apiResource.getHost();
@@ -96,7 +94,7 @@ public class DynamicRouteService implements ApplicationEventPublisherAware {
         this.publisher.publishEvent(new RefreshRoutesEvent(this));
         log.info("addRoute success!");
         log.info("apiResource info: {}", apiResource);
-        log.info("route info routeId:{}, url:{}",simpleUUID,url);
+        log.info("route info routeId:{}, url:{}",apiResource.getCode(),url);
     }
 
     public void  removeRoute(String routeId){
