@@ -54,14 +54,15 @@ public class UserServiceImpl implements UserService {
         // todo 加锁，使得校验和限制手机号变成一个原子操作
         // 校验该手机号和ip是否被限制
         checkLimited(REGISTER_AUTH_CODE_INTERVAL,phone, ip);
-        // 限制手机号和ip
-        limitSend(REGISTER_AUTH_CODE_INTERVAL,phone,ip);
         // 生成验证码并保存到redis
         String code = generateAuthCode();
         cacheAuthCode(REGISTER_AUTH_CODE,phone,code);
         //发送消息
         try {
-            return messageService.sendTextMsg(phone, MessageEnum.REGISTER_AUTH_CODE,new AuthCodeTemplateParam(code));
+            messageService.sendTextMsg(phone, MessageEnum.REGISTER_AUTH_CODE,new AuthCodeTemplateParam(code));
+            // 限制手机号和ip
+            limitSend(REGISTER_AUTH_CODE_INTERVAL,phone,ip);
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
             log.debug("发送短信验证码失败 phone={},code={}",phone,code);
@@ -74,14 +75,15 @@ public class UserServiceImpl implements UserService {
         // todo 加锁，使得校验和限制手机号变成一个原子操作
         // 校验该手机号和ip是否被限制
         checkLimited(SENSITIVE_AUTH_CODE_INTERVAL, phone, ip);
-        // 限制手机号和ip
-        limitSend(SENSITIVE_AUTH_CODE_INTERVAL, phone,ip);
         // 生成验证码并保存到redis
         String code = generateAuthCode();
         cacheAuthCode(SENSITIVE_AUTH_CODE,phone,code);
         //发送消息
         try {
-            return messageService.sendTextMsg(phone, MessageEnum.SENSITIVE_AUTH_CODE,new AuthCodeTemplateParam(code));
+            messageService.sendTextMsg(phone, MessageEnum.SENSITIVE_AUTH_CODE,new AuthCodeTemplateParam(code));
+            // 限制手机号和ip
+            limitSend(SENSITIVE_AUTH_CODE_INTERVAL, phone,ip);
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
             log.debug("发送短信验证码失败 phone={},code={}",phone,code);
@@ -94,7 +96,6 @@ public class UserServiceImpl implements UserService {
         // todo 加锁，使得校验验证码和校验成功删除验证码变成一个原子操作
         // 判断验证码是否正确
         checkAuthCode(REGISTER_AUTH_CODE,registerUserVO.getPhone(),registerUserVO.getAuthCode());
-        removeCacheAuthCode(REGISTER_AUTH_CODE,registerUserVO.getPhone());
         // 判断手机号是否重复
         checkPhone(registerUserVO.getPhone());
         // 判断用户名是否重复
@@ -106,7 +107,9 @@ public class UserServiceImpl implements UserService {
         user.setNickName(NICK_NAME);
         user.setHeadPhoto(HEAD_PHOTO);
         user.setStatus(ENABLE);
-        return userDomainService.createUser(user);
+        userDomainService.createUser(user);
+        removeCacheAuthCode(REGISTER_AUTH_CODE,registerUserVO.getPhone());
+        return true;
     }
 
     @Override

@@ -28,7 +28,7 @@ public class UserController {
     // 注册
     @PostMapping("/register")
     public Result<Boolean> register(@RequestBody RegisterUserVO registerUserVO){
-        return null;
+        return Result.success(userService.register(registerUserVO));
     }
 
     // 登陆

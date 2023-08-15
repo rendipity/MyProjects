@@ -27,6 +27,11 @@ public class ApiUser {
     private String password;
 
     /**
+     * 手机号
+     */
+    private String phone;
+
+    /**
      * 昵称
      */
     private String nickName;
