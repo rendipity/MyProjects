@@ -9,7 +9,7 @@ import com.aliyun.teaopenapi.models.Config;
 import com.publicapi.apimanage.core.enums.MessageEnum;
 import com.publicapi.apimanage.core.properties.MessageProperties;
 import com.publicapi.apimanage.core.service.textmessage.TextMessageService;
-import com.publicapi.apimanage.core.template.TemplateParam;
+import com.publicapi.apimanage.core.service.textmessage.template.TemplateParam;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

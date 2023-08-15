@@ -2,7 +2,7 @@ import com.publicapi.apimanage.ApiManageApplicationStarter;
 import com.publicapi.apimanage.biz.service.UserService;
 import com.publicapi.apimanage.core.enums.MessageEnum;
 import com.publicapi.apimanage.core.service.textmessage.impl.TextMessageServiceImpl;
-import com.publicapi.apimanage.core.template.AuthCodeTemplateParam;
+import com.publicapi.apimanage.core.service.textmessage.template.AuthCodeTemplateParam;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,7 +28,7 @@ public class TextMQMessageTest {
     }
     @Test
     public void sendRegisterCode(){
-        Boolean result = userService.sendRegisterAuthCode("17782072752");
+        Boolean result = userService.sendRegisterAuthCode("17782072752","127.0.0.1");
         if (result){
             System.out.println("发送成功");
         }else{
@@ -38,7 +38,7 @@ public class TextMQMessageTest {
 
     @Test
     public void sendSensitiveCode(){
-        Boolean result = userService.sendSensitiveAuthCode("17782072752");
+        Boolean result = userService.sendSensitiveAuthCode("17782072752","127.0.0.1");
         if (result){
             System.out.println("发送成功");
         }else{

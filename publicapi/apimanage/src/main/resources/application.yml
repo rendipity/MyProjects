@@ -4,7 +4,12 @@ spring:
     username: root
     password: 3344Wanc
     driver-class-name: com.mysql.cj.jdbc.Driver
-
+  #redis
+  redis:
+    url: 127.0.0.1:6379
+    # username:
+    # password:
+    database: 0
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
@@ -38,3 +43,6 @@ dubbo:
   #  timeout: 3000
   #  retries: 0
   #  check: false
+
+
+

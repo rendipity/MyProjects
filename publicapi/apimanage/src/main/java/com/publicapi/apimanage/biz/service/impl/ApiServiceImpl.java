@@ -12,7 +12,7 @@ import com.publicapi.apimanage.biz.convert.ApiResourceConvert;
 import com.publicapi.apimanage.biz.service.ApiService;
 import com.publicapi.apimanage.biz.statemachine.ApiStateMachine;
 import com.publicapi.apimanage.common.CommonPage;
-import com.publicapi.apimanage.common.exception.ApiResourceException;
+import com.publicapi.apimanage.common.exception.ApiManageException;
 import com.publicapi.apimanage.common.qto.ApiEvent;
 import com.publicapi.apimanage.common.qto.ApiListQuery;
 import com.publicapi.apimanage.common.qto.ApiPageQuery;
@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
 import static com.publicapi.apimanage.common.enums.ErrorResultEnum.*;
 import static com.publicapi.constants.APIConstants.REQUEST;
 import static com.publicapi.constants.APIConstants.RESPONSE;
@@ -104,7 +105,7 @@ public class ApiServiceImpl implements ApiService {
         ApiResourceDO apiResourceDO = apiResourceRepository.getOne(Wrappers.<ApiResourceDO>lambdaQuery()
                 .eq(ApiResourceDO::getCode, apiResource.getCode()));
         if (apiResourceDO == null)
-            throw new ApiResourceException(API_NOT_EXIST);
+            throw new ApiManageException(API_NOT_EXIST);
         // 合并请求参数和响应参数
         List<ApiParams> requestParams = apiResource.getRequestParams();
         List<ApiParamsDO> requestParamsDOS = paramsConvert.listModal2Do(requestParams);
@@ -164,10 +165,10 @@ public class ApiServiceImpl implements ApiService {
     @Override
     public Boolean eventApi(ApiEvent event) {
         String nextStatus = stateMachine.transfer(event.getStatus(), event.getEvent());
-        Assert.notNull(nextStatus,()->new ApiResourceException(PARAMETER_EXCEPTION));
+        Assert.notNull(nextStatus,()->new ApiManageException(PARAMETER_EXCEPTION));
         ApiResourceDO apiResourceDO = apiResourceRepository.getByCode(event.getCode());
-        Assert.notNull(apiResourceDO,()->new ApiResourceException(API_NOT_EXIST));
-        Assert.equals(apiResourceDO.getStatus(),event.getStatus(),()->new ApiResourceException(ABNORMAL_STATE));
+        Assert.notNull(apiResourceDO,()->new ApiManageException(API_NOT_EXIST));
+        Assert.equals(apiResourceDO.getStatus(),event.getStatus(),()->new ApiManageException(ABNORMAL_STATE));
         boolean updateResult = apiResourceRepository.update(
                 Wrappers.<ApiResourceDO>lambdaUpdate()
                         .eq(ApiResourceDO::getCode, event.getCode())
@@ -203,6 +204,6 @@ public class ApiServiceImpl implements ApiService {
     private void checkUrl(ApiResource apiResource){
         ApiResourceDO api = apiResourceRepository.getOne(apiResource.getProtocol(), apiResource.getHost(), apiResource.getPath());
         if (ObjectUtil.isNotNull(api))
-            throw new ApiResourceException(URL_DUPLICATION);
+            throw new ApiManageException(URL_DUPLICATION);
     }
 }

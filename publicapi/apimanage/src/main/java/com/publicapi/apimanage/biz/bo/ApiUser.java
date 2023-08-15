@@ -1,5 +1,6 @@
 package com.publicapi.apimanage.biz.bo;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
 import java.util.Date;
@@ -26,27 +27,44 @@ public class ApiUser {
     private String password;
 
     /**
-     * 
+     * 昵称
      */
-    private String appkey;
+    private String nickName;
+
 
     /**
      * 
      */
-    private String appsecret;
+    private String appKey;
+
+    /**
+     * 
+     */
+    private String appSecret;
+
+    /**
+     * 角色
+     */
+    private String role;
+
+    /**
+     * 头像
+     */
+    private String headPhoto;
 
     /**
      * 
      */
     private String status;
 
+
     /**
-     * 
+     * 上次登陆时间
      */
-    private Date createTime;
+    private Date lastLoginTime;
 
     /**
      * 
      */
-    private String creator;
+    private Date createTime;
 }

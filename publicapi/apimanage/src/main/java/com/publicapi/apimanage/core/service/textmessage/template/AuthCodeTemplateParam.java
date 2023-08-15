@@ -1,4 +1,4 @@
-package com.publicapi.apimanage.core.template;
+package com.publicapi.apimanage.core.service.textmessage.template;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

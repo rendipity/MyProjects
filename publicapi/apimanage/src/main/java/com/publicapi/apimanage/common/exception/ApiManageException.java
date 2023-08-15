@@ -4,12 +4,12 @@ import com.publicapi.apimanage.common.enums.ErrorResultEnum;
 import lombok.Data;
 
 @Data
-public class ApiResourceException extends RuntimeException{
+public class ApiManageException extends RuntimeException{
 
     private String errorCode;
     private String errorMessage;
 
-    public ApiResourceException(ErrorResultEnum errorResultEnum) {
+    public ApiManageException(ErrorResultEnum errorResultEnum) {
         // todo 如果不super会发生什么
         super(errorResultEnum.getErrorMessage());
 

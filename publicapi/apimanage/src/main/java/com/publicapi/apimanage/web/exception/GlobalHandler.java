@@ -1,16 +1,17 @@
 package com.publicapi.apimanage.web.exception;
 
 import com.publicapi.apimanage.common.Result;
-import com.publicapi.apimanage.common.exception.ApiResourceException;
-import org.springframework.web.bind.annotation.*;
+import com.publicapi.apimanage.common.exception.ApiManageException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import static com.publicapi.apimanage.common.enums.ErrorResultEnum.SYSTEM_EXCEPTION;
 
 @RestControllerAdvice
 public class GlobalHandler {
 
-    @ExceptionHandler(ApiResourceException.class)
-    public Result<Object> apiResourceExceptionHandler(ApiResourceException e){
+    @ExceptionHandler(ApiManageException.class)
+    public Result<Object> apiResourceExceptionHandler(ApiManageException e){
         e.printStackTrace();
         return Result.fail(e.getErrorCode(),e.getErrorMessage());
     }

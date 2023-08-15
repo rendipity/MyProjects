@@ -1,23 +1,29 @@
 package com.publicapi.apimanage.web.controller;
 
+import com.publicapi.apimanage.biz.service.UserService;
 import com.publicapi.apimanage.common.Result;
 import com.publicapi.apimanage.web.vo.user.*;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 @RestController
 @RequestMapping("/user")
 public class UserController {
 
-    // 发送验证码
-    /*
-    同一个手机号、同一个ip，1分钟内只能发送一次
-    验证码5分钟内有效，支持5分钟内的多个验证码都有效
+    @Resource
+    private UserService userService;
+    /**
+     * 发送验证码
+     * 同一个手机号、同一个ip，1分钟内只能发送一次
+     * 验证码5分钟内有效，支持5分钟内的多个验证码都有效
      */
     @GetMapping("/authCode")
     public Result<Boolean> authCode(String phone){
-        return null;
+        // todo  获取用户ip
+        String ip = "127.0.0.1";
+        return Result.success(userService.sendRegisterAuthCode(phone,ip));
     }
     // 注册
     @PostMapping("/register")

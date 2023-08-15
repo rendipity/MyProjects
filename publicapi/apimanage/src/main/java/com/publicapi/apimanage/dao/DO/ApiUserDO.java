@@ -71,18 +71,6 @@ public class ApiUserDO implements Serializable {
     private String headPhoto;
 
     /**
-     * 调用次数
-     */
-    @TableField(value = "invoke_times")
-    private Integer invokeTimes;
-
-    /**
-     * 总的调用次数
-     */
-    @TableField(value = "total_times")
-    private Integer totalTimes;
-
-    /**
      * 状态
      */
     @TableField(value = "status")
