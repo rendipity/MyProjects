@@ -9,7 +9,10 @@ import cn.hutool.core.util.RandomUtil;
 import com.publicapi.apimanage.biz.bo.ApiUser;
 import com.publicapi.apimanage.biz.convert.ApiUserConvert;
 import com.publicapi.apimanage.biz.service.UserService;
+import com.publicapi.apimanage.common.UserContext;
+import com.publicapi.apimanage.common.UserInfo;
 import com.publicapi.apimanage.common.exception.ApiManageException;
+import com.publicapi.apimanage.common.utils.TokenUtil;
 import com.publicapi.apimanage.core.enums.MessageEnum;
 import com.publicapi.apimanage.core.service.textmessage.TextMessageService;
 import com.publicapi.apimanage.core.service.textmessage.template.AuthCodeTemplateParam;
@@ -113,8 +116,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Boolean login(LoginUserVO loginUserVO) {
-        return null;
+    public String login(LoginUserVO loginUserVO) {
+        ApiUser user = userDomainService.getUserByUsername(loginUserVO.getUsername());
+        if (ObjectUtil.isEmpty(user)||!user.getPassword().equals(loginUserVO.getPassword())){
+            throw new ApiManageException(USERNAME_OR_PASSWORD_ERROR);
+        }
+        UserInfo userInfo = new UserInfo();
+        userInfo.setUsername(user.getUsername());
+        userInfo.setRole(user.getRole());
+        return TokenUtil.generate(userInfo);
     }
 
     private void checkAuthCode(String usage,String phone, String authCode){

@@ -36,6 +36,6 @@ public interface UserService {
      * @param loginUserVO
      * @return
      */
-    Boolean login(@RequestBody LoginUserVO loginUserVO);
+    String login(@RequestBody LoginUserVO loginUserVO);
 
 }

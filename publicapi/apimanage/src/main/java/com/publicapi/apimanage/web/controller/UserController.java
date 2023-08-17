@@ -33,8 +33,8 @@ public class UserController {
 
     // 登陆
     @PostMapping("/login")
-    public Result<Boolean> login(@RequestBody LoginUserVO loginUserVO){
-        return null;
+    public Result<String> login(@RequestBody LoginUserVO loginUserVO){
+        return Result.success(userService.login(loginUserVO));
     }
 
     //修改密码

@@ -20,6 +20,8 @@ public enum ErrorResultEnum {
     AUTH_CODE_ERROR("00023","验证码错误"),
     PHONE_HAS_EXISTED("00024","该手机号已经注册过用户"),
     USERNAME_HAS_EXISTED("00025","用户名已存在"),
+    USERNAME_OR_PASSWORD_ERROR("00026","用户名或密码错误"),
+    ACCESS_FORBIDDEN("00027","无权限访问"),
     ;
     private String errorCode;
     private String errorMessage;

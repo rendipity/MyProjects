@@ -1,6 +1,9 @@
 package com.publicapi.apimanage.common;
 
+import com.publicapi.apimanage.common.enums.ErrorResultEnum;
 import lombok.Data;
+
+import java.sql.Statement;
 
 @Data
 public class Result <T> {
@@ -26,7 +29,10 @@ public class Result <T> {
         return new Result<>(true,data);
     }
 
-    public static <T> Result<T> fail(String errorCode, String errorMsg){
+    public static  Result<Object> fail(String errorCode, String errorMsg){
         return new Result<>(errorCode,errorMsg);
+    }
+    public static  Result<Object> fail(ErrorResultEnum resultEnum){
+        return new Result<>(resultEnum.getErrorCode(), resultEnum.getErrorMessage());
     }
 }
