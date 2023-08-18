@@ -1,17 +1,23 @@
 package com.publicapi.apimanage.web.controller;
 
+import cn.hutool.core.util.StrUtil;
 import com.publicapi.apimanage.biz.service.UserService;
 import com.publicapi.apimanage.common.CommonPage;
 import com.publicapi.apimanage.common.Result;
+import com.publicapi.apimanage.common.exception.ApiManageException;
 import com.publicapi.apimanage.common.query.UserPageQuery;
 import com.publicapi.apimanage.web.vo.user.*;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.validation.constraints.NotEmpty;
+
+import static com.publicapi.apimanage.common.enums.ErrorResultEnum.AUTH_CODE_IS_EMPTY;
 
 @RestController
 @RequestMapping("/user")
+@Validated
 public class UserController {
 
     @Resource
@@ -80,7 +86,10 @@ public class UserController {
      * 查看appKey、secretKey
      */
     @GetMapping("/authentication")
-    public Result<UserKeyVO> getUserKey(String authCode){
+    public Result<UserKeyVO> getUserKey(@NotEmpty(message = "[authCode]验证码不能为空") String authCode){
+        if (StrUtil.isEmpty(authCode)){
+            throw new ApiManageException(AUTH_CODE_IS_EMPTY);
+        }
         return Result.success(userService.getUserKey(authCode));
     }
 
@@ -88,7 +97,10 @@ public class UserController {
      * 重置appKey、secretKey
      */
     @GetMapping("/authentication/reset")
-    public Result<UserKeyVO> resetUserKey(String authCode){
+    public Result<UserKeyVO> resetUserKey(@NotEmpty(message = "[authCode]验证码不能为空") String authCode){
+        if (StrUtil.isEmpty(authCode)){
+            throw new ApiManageException(AUTH_CODE_IS_EMPTY);
+        }
         return Result.success(userService.resetUserKey(authCode));
     }
 

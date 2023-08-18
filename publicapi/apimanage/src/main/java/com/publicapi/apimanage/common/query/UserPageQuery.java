@@ -25,7 +25,7 @@ public class UserPageQuery {
      */
     private String status;
 
-    private Integer pageNum;
+    private Integer pageNum = 1;
 
-    private Integer pageSize;
+    private Integer pageSize = 10;
 }

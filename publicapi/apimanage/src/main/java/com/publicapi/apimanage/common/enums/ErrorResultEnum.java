@@ -28,6 +28,7 @@ public enum ErrorResultEnum {
     TOKEN_INVALID("00031","token已失效"),
     PHONE_INVALID("00032","手机号不合法"),
     IP_INVALID("00033","IP不合法"),
+    AUTH_CODE_IS_EMPTY("00034","验证码不能为空"),
     ;
     private String errorCode;
     private String errorMessage;
