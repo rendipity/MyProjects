@@ -1,10 +1,10 @@
 package com.publicapi.apimanage.biz.service;
 
 
-import com.publicapi.apimanage.web.vo.user.LoginUserVO;
-import com.publicapi.apimanage.web.vo.user.RegisterUserVO;
+import com.publicapi.apimanage.common.CommonPage;
+import com.publicapi.apimanage.common.query.UserPageQuery;
+import com.publicapi.apimanage.web.vo.user.*;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 public interface UserService {
@@ -18,11 +18,9 @@ public interface UserService {
 
     /**
      * 发送敏感信息验证码  查看和修改appkey时使用
-     * @param phone
-     * @param ip
      * @return
      */
-    public Boolean sendSensitiveAuthCode(String phone, String ip);
+    public Boolean sendSensitiveAuthCode();
 
     /**
      * 注册
@@ -36,6 +34,41 @@ public interface UserService {
      * @param loginUserVO
      * @return
      */
-    String login(@RequestBody LoginUserVO loginUserVO);
+    String login(LoginUserVO loginUserVO);
+
+    /**
+     * 修改密码
+     * @param updatePasswordVO
+     * @return
+     */
+    Boolean updatePassword(UpdatePasswordVO updatePasswordVO);
+
+    /**
+     * 获取当前用户详情
+     */
+    public UserDetailsVO getUser();
+
+    /**
+     * 编辑用户头像、昵称
+     */
+    public Boolean updateUserInfo(UpdateUserInfoVO updateUser);
+    /**
+     * 修改角色
+     */
+    public Boolean updateRole(UpdateRoleVO updateRoleVO);
+
+    /**
+     *  用户列表
+     */
+    public CommonPage<UserPageVO> userList(UserPageQuery userPageQuery);
+    /**
+     * 查看appKey、secretKey
+     */
+    public UserKeyVO getUserKey(String authCode);
+
+    /**
+     * 重置appKey、secretKey
+     * */
+    public UserKeyVO resetUserKey(String authCode);
 
 }

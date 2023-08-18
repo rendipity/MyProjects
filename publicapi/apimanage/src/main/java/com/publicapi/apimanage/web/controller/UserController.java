@@ -2,7 +2,9 @@ package com.publicapi.apimanage.web.controller;
 
 import com.publicapi.apimanage.biz.service.UserService;
 import com.publicapi.apimanage.common.Result;
+import com.publicapi.apimanage.common.query.UserPageQuery;
 import com.publicapi.apimanage.web.vo.user.*;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -27,19 +29,19 @@ public class UserController {
     }
     // 注册
     @PostMapping("/register")
-    public Result<Boolean> register(@RequestBody RegisterUserVO registerUserVO){
+    public Result<Boolean> register(@RequestBody @Validated RegisterUserVO registerUserVO){
         return Result.success(userService.register(registerUserVO));
     }
 
     // 登陆
     @PostMapping("/login")
-    public Result<String> login(@RequestBody LoginUserVO loginUserVO){
+    public Result<String> login(@RequestBody @Validated LoginUserVO loginUserVO){
         return Result.success(userService.login(loginUserVO));
     }
 
     //修改密码
     @PostMapping("/password/update")
-    public Result<Boolean> updatePassword(@RequestBody UpdatePasswordVO updatePasswordVO){
+    public Result<Boolean> updatePassword(@RequestBody @Validated UpdatePasswordVO updatePasswordVO){
         return null;
     }
 
@@ -51,30 +53,42 @@ public class UserController {
 
     // 编辑用户信息 头像，用户名
     @PostMapping("/userinfo/update")
-    public Result<UserDetailsVO> updateUserInfo(@RequestBody UpdateUserInfoVO updateUser){
+    public Result<UserDetailsVO> updateUserInfo(@RequestBody @Validated UpdateUserInfoVO updateUser){
             return null;
     }
     // 修改角色
     @PostMapping("/role/update")
-    public Result<Boolean> updateRole(@RequestBody UpdateRoleVO updateRoleVO){
+    public Result<Boolean> updateRole(@RequestBody @Validated UpdateRoleVO updateRoleVO){
         return null;
     }
 
     // 用户列表
     @GetMapping("/list")
-    public Result<List<UserListVO>> userList(Integer pageNum, Integer pageSize){
+    public Result<List<UserPageVO>> userList(UserPageQuery userPageQuery){
         return null;
     }
 
-    // 查看appKey、secretKey
+    /**
+     * 发送敏感信息验证码
+     */
+    @GetMapping("/sensitive")
+    public Result<Boolean> sensitiveAuthCode(){
+        return Result.success(userService.sendSensitiveAuthCode());
+    }
+
+    /**
+     * 查看appKey、secretKey
+     */
     @GetMapping("/key")
-    public Result<UserKeyVO> getUserKey(){
+    public Result<UserKeyVO> getUserKey(String authCode){
         return null;
     }
 
-    // 重置appKey、secretKey
+    /**
+     * 重置appKey、secretKey
+     */
     @GetMapping
-    public Result<UserKeyVO> resetUserKey(){
+    public Result<UserKeyVO> resetUserKey(String authCode){
         return null;
     }
 

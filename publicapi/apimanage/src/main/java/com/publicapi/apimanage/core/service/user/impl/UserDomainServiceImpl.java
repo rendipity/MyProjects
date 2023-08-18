@@ -3,6 +3,8 @@ package com.publicapi.apimanage.core.service.user.impl;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.publicapi.apimanage.biz.bo.ApiUser;
 import com.publicapi.apimanage.biz.convert.ApiUserConvert;
+import com.publicapi.apimanage.common.CommonPage;
+import com.publicapi.apimanage.common.query.UserPageQuery;
 import com.publicapi.apimanage.core.service.user.UserDomainService;
 import com.publicapi.apimanage.dao.DO.ApiUserDO;
 import com.publicapi.apimanage.dao.repository.ApiUserRepository;
@@ -35,5 +37,16 @@ public class UserDomainServiceImpl implements UserDomainService {
     public ApiUser getUserByUsername(String username) {
         ApiUserDO apiUserDO = userRepository.getOne(Wrappers.<ApiUserDO>lambdaQuery().eq(ApiUserDO::getUsername, username));
         return userConvert.do2Modal(apiUserDO);
+    }
+
+    @Override
+    public Boolean updateUserById(ApiUser user) {
+        return userRepository.updateById(userConvert.modal2DO(user));
+    }
+
+    @Override
+    public CommonPage<ApiUser> pageUser(UserPageQuery pageQuery) {
+        CommonPage<ApiUserDO> userDOCommonPage = userRepository.pageUser(pageQuery);
+        return CommonPage.convert(userDOCommonPage,userConvert.listDo2Modal(userDOCommonPage.getLists()));
     }
 }

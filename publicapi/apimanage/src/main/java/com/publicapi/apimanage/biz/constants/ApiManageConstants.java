@@ -24,18 +24,13 @@ public class ApiManageConstants {
     //验证码有效时间 单位: 分钟
     public static final Integer  AUTH_CODE_TTL = 5;
 
-    // 角色
-    public static final String  ADMIN = "admin";
-
-    public static final String  DEVELOPER = "developer";
-
-    public static final String  USER = "user";
-
     // 默认用户名
     public static final String  NICK_NAME = "....";
 
     // 头像
     public static final String  HEAD_PHOTO = "https://bloglijie.oss-cn-beijing.aliyuncs.com/img/v2-698a5ea814e785a2a7f1c00237c38b6e_r.jpeg";
 
-    // 状态
+    public static final String  PHONE_REGULAR= "/^1(3\\d|4[5-9]|5[0-35-9]|6[2567]|7[0-8]|8\\d|9[0-35-9])\\d{8}$/";
+
+    public static final String IP_REGULAR = "^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3})$";
 }

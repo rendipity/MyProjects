@@ -1,5 +1,6 @@
 package com.publicapi.apimanage.web.vo.user;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -42,12 +43,18 @@ public class UserDetailsVO implements Serializable {
     private String headPhoto;
 
     /**
-     * 剩余调用次数
+     * 状态
      */
-    private Integer restInvokeTimes;
+    private String status;
+
+    /**
+     * 上次登陆时间
+     */
+    private Date lastLoginTime;
 
     /**
      * 创建时间
      */
     private Date createTime;
+
 }

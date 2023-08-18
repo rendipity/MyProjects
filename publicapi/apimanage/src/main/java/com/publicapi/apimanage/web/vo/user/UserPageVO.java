@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-public class UserListVO {
+public class UserPageVO {
     /**
      *
      */
@@ -30,16 +30,6 @@ public class UserListVO {
      * 角色
      */
     private String role;
-
-    /**
-     * 调用次数
-     */
-    private Integer invokeTimes;
-
-    /**
-     * 总的调用次数
-     */
-    private Integer totalTimes;
 
     /**
      * 状态

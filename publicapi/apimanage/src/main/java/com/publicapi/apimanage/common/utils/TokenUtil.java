@@ -15,6 +15,7 @@ public class TokenUtil {
         return JWT.create()
                 .setPayload("username",userInfo.getUsername())
                 .setPayload("role",userInfo.getRole())
+                .setPayload("phone",userInfo.getPhone())
                 .setExpiresAt(DateUtil.date().offset(DateField.HOUR,2))
                 .setKey(SECRET.getBytes())
                 .sign();
@@ -37,6 +38,7 @@ public class TokenUtil {
         UserInfo user = new UserInfo();
         user.setUsername((String)jwt.getPayload("username"));
         user.setRole((String)jwt.getPayload("role"));
+        user.setPhone((String)jwt.getPayload("phone"));
         return user;
     }
 

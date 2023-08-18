@@ -38,7 +38,7 @@ public class TextMQMessageTest {
 
     @Test
     public void sendSensitiveCode(){
-        Boolean result = userService.sendSensitiveAuthCode("17782072752","127.0.0.1");
+        Boolean result = userService.sendSensitiveAuthCode();
         if (result){
             System.out.println("发送成功");
         }else{

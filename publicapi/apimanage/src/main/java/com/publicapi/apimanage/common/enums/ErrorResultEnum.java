@@ -22,6 +22,12 @@ public enum ErrorResultEnum {
     USERNAME_HAS_EXISTED("00025","用户名已存在"),
     USERNAME_OR_PASSWORD_ERROR("00026","用户名或密码错误"),
     ACCESS_FORBIDDEN("00027","无权限访问"),
+    USER_NOT_EXIST("00028","用户不存在"),
+    PASSWORD_ERROR("00029","密码错误"),
+    ROLE_NOT_EXIST("00030","角色不存在"),
+    TOKEN_INVALID("00031","token已失效"),
+    PHONE_INVALID("00032","手机号不合法"),
+    IP_INVALID("00033","IP不合法"),
     ;
     private String errorCode;
     private String errorMessage;

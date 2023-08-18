@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.publicapi.apimanage.common.enums.ErrorResultEnum.ACCESS_FORBIDDEN;
+import static com.publicapi.apimanage.common.enums.ErrorResultEnum.TOKEN_INVALID;
 
 public class JwtAuthenticationInterceptor implements HandlerInterceptor {
 
@@ -44,7 +44,7 @@ public class JwtAuthenticationInterceptor implements HandlerInterceptor {
     public void printResponse(HttpServletResponse response) throws IOException {
         response.setCharacterEncoding(CharsetUtil.UTF_8);
         response.setContentType(ContentType.JSON.getValue());
-        response.getWriter().println(JSONUtil.toJsonStr(Result.fail(ACCESS_FORBIDDEN)));
+        response.getWriter().println(JSONUtil.toJsonStr(Result.fail(TOKEN_INVALID)));
     }
 
 }

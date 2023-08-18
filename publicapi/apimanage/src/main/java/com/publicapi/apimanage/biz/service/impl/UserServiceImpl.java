@@ -3,22 +3,22 @@ package com.publicapi.apimanage.biz.service.impl;
 
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.util.IdUtil;
-import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.RandomUtil;
+import cn.hutool.core.util.*;
 import com.publicapi.apimanage.biz.bo.ApiUser;
+import com.publicapi.apimanage.biz.constants.RoleEnum;
 import com.publicapi.apimanage.biz.convert.ApiUserConvert;
 import com.publicapi.apimanage.biz.service.UserService;
+import com.publicapi.apimanage.common.CommonPage;
 import com.publicapi.apimanage.common.UserContext;
 import com.publicapi.apimanage.common.UserInfo;
 import com.publicapi.apimanage.common.exception.ApiManageException;
+import com.publicapi.apimanage.common.query.UserPageQuery;
 import com.publicapi.apimanage.common.utils.TokenUtil;
 import com.publicapi.apimanage.core.enums.MessageEnum;
 import com.publicapi.apimanage.core.service.textmessage.TextMessageService;
 import com.publicapi.apimanage.core.service.textmessage.template.AuthCodeTemplateParam;
 import com.publicapi.apimanage.core.service.user.UserDomainService;
-import com.publicapi.apimanage.web.vo.user.LoginUserVO;
-import com.publicapi.apimanage.web.vo.user.RegisterUserVO;
+import com.publicapi.apimanage.web.vo.user.*;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.*;
 import org.springframework.stereotype.Service;
@@ -32,6 +32,7 @@ import java.util.stream.Collectors;
 
 import static cn.hutool.core.date.DateField.MINUTE;
 import static com.publicapi.apimanage.biz.constants.ApiManageConstants.*;
+import static com.publicapi.apimanage.biz.constants.RoleEnum.USER;
 import static com.publicapi.apimanage.common.enums.ErrorResultEnum.*;
 import static com.publicapi.constants.APIConstants.ENABLE;
 
@@ -55,16 +56,23 @@ public class UserServiceImpl implements UserService {
     @Override
     public Boolean sendRegisterAuthCode(String phone, String ip) {
         // todo 加锁，使得校验和限制手机号变成一个原子操作
+        // 校验手机号是否合法
+        checkPhoneFormat(phone);
+        // 校验IP是否合法
+        checkIpFormat(ip);
         // 校验该手机号和ip是否被限制
-        checkLimited(REGISTER_AUTH_CODE_INTERVAL,phone, ip);
-        // 生成验证码并保存到redis
+        checkPhoneLimited(REGISTER_AUTH_CODE_INTERVAL,phone);
+        checkIPLimited(REGISTER_AUTH_CODE_INTERVAL,ip);
+        // 生成验证码
         String code = generateAuthCode();
+        // 将验证码保存到redis
         cacheAuthCode(REGISTER_AUTH_CODE,phone,code);
         //发送消息
         try {
             messageService.sendTextMsg(phone, MessageEnum.REGISTER_AUTH_CODE,new AuthCodeTemplateParam(code));
             // 限制手机号和ip
-            limitSend(REGISTER_AUTH_CODE_INTERVAL,phone,ip);
+            limitPhoneSend(REGISTER_AUTH_CODE_INTERVAL,phone);
+            limitIPSend(REGISTER_AUTH_CODE_INTERVAL,ip);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -74,18 +82,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Boolean sendSensitiveAuthCode(String phone, String ip) {
-        // todo 加锁，使得校验和限制手机号变成一个原子操作
-        // 校验该手机号和ip是否被限制
-        checkLimited(SENSITIVE_AUTH_CODE_INTERVAL, phone, ip);
+    public Boolean sendSensitiveAuthCode() {
+        // todo 加锁，使得变成一个原子操作
+        String phone = UserContext.get().getPhone();
+        // 校验该手机号是否被限制
+        checkPhoneLimited(SENSITIVE_AUTH_CODE_INTERVAL, phone);
         // 生成验证码并保存到redis
         String code = generateAuthCode();
         cacheAuthCode(SENSITIVE_AUTH_CODE,phone,code);
         //发送消息
         try {
             messageService.sendTextMsg(phone, MessageEnum.SENSITIVE_AUTH_CODE,new AuthCodeTemplateParam(code));
-            // 限制手机号和ip
-            limitSend(SENSITIVE_AUTH_CODE_INTERVAL, phone,ip);
+            // 限制手机号
+            limitPhoneSend(SENSITIVE_AUTH_CODE_INTERVAL,phone);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -106,7 +115,7 @@ public class UserServiceImpl implements UserService {
         ApiUser user = userConvert.vo2Modal(registerUserVO);
         // 生成 appKey 和 secretKey
         generateAuthentication(user);
-        user.setRole(USER);
+        user.setRole(USER.getName());
         user.setNickName(NICK_NAME);
         user.setHeadPhoto(HEAD_PHOTO);
         user.setStatus(ENABLE);
@@ -124,10 +133,116 @@ public class UserServiceImpl implements UserService {
         UserInfo userInfo = new UserInfo();
         userInfo.setUsername(user.getUsername());
         userInfo.setRole(user.getRole());
+        userInfo.setPhone(user.getPhone());
         return TokenUtil.generate(userInfo);
     }
 
-    private void checkAuthCode(String usage,String phone, String authCode){
+    @Override
+    public Boolean updatePassword(UpdatePasswordVO updatePasswordVO) {
+        // 校验用户是否存在
+        ApiUser user = userDomainService.getUserByUsername(UserContext.get().getUsername());
+        if(ObjectUtil.isEmpty(user)){
+            throw new ApiManageException(USER_NOT_EXIST);
+        }
+        // 校验旧密码是否正确
+        if (!user.getPassword().equals(updatePasswordVO.getOldPassword())){
+            throw new ApiManageException(PASSWORD_ERROR);
+        }
+        user.setPassword(updatePasswordVO.getNewPassword());
+        return userDomainService.updateUserById(user);
+    }
+
+    @Override
+    public UserDetailsVO getUser() {
+        ApiUser user = userDomainService.getUserByUsername(UserContext.get().getUsername());
+        if(ObjectUtil.isEmpty(user)){
+            throw new ApiManageException(USER_NOT_EXIST);
+        }
+        return userConvert.modal2DetailsVo(user);
+    }
+
+    @Override
+    public Boolean updateUserInfo(UpdateUserInfoVO updateUser) {
+        ApiUser user = userDomainService.getUserByUsername(UserContext.get().getUsername());
+        if(ObjectUtil.isEmpty(user)){
+            throw new ApiManageException(USER_NOT_EXIST);
+        }
+        if (StrUtil.isNotEmpty(updateUser.getHeadPhoto())){
+            user.setHeadPhoto(updateUser.getHeadPhoto());
+        }
+        if (StrUtil.isNotEmpty(updateUser.getNickName())){
+            user.setNickName(updateUser.getNickName());
+        }
+        return userDomainService.updateUserById(user);
+    }
+
+    @Override
+    public Boolean updateRole(UpdateRoleVO updateRoleVO) {
+        ApiUser user = userDomainService.getUserByUsername(updateRoleVO.getUsername());
+        if(ObjectUtil.isEmpty(user)){
+            throw new ApiManageException(USER_NOT_EXIST);
+        }
+        // 校验角色的合法性
+        checkRole(updateRoleVO.getRole());
+        user.setRole(updateRoleVO.getRole());
+        return userDomainService.updateUserById(user);
+    }
+
+    @Override
+    public CommonPage<UserPageVO> userList(UserPageQuery userPageQuery) {
+        CommonPage<ApiUser> userCommonPage = userDomainService.pageUser(userPageQuery);
+        return CommonPage.convert(userCommonPage,userConvert.listModal2PageVO(userCommonPage.getLists()));
+    }
+
+    @Override
+    public UserKeyVO getUserKey(String authCode) {
+        // todo 原子操作
+        UserInfo userInfo = UserContext.get();
+        // 校验验证码
+        checkAuthCode(SENSITIVE_AUTH_CODE,userInfo.getPhone(), authCode);
+        // 查询当前用户的appKey和appSecret
+        ApiUser user = userDomainService.getUserByUsername(userInfo.getUsername());
+        // 删除验证码
+        removeCacheAuthCode(SENSITIVE_AUTH_CODE,userInfo.getPhone());
+        UserKeyVO keyVO = userConvert.modal2KeyVO(user);
+        return keyVO;
+    }
+
+    @Override
+    public UserKeyVO resetUserKey(String authCode) {
+        // todo 原子操作
+        UserInfo userInfo = UserContext.get();
+        // 校验验证码
+        checkAuthCode(SENSITIVE_AUTH_CODE,userInfo.getPhone(), authCode);
+        // 获取当前用户信息
+        ApiUser user = userDomainService.getUserByUsername(userInfo.getUsername());
+        // 重新生成appKey和appSecret
+        generateAuthentication(user);
+        // 保存新的用户认证信息
+        userDomainService.updateUserById(user);
+        // 删除验证码
+        removeCacheAuthCode(SENSITIVE_AUTH_CODE,userInfo.getPhone());
+        return userConvert.modal2KeyVO(user);
+    }
+
+    void checkPhoneFormat(String phone){
+        if (!ReUtil.isMatch(PHONE_REGULAR,phone)){
+            throw new ApiManageException(PHONE_INVALID);
+        }
+    }
+    void checkIpFormat(String ip){
+        if (!ReUtil.isMatch(IP_REGULAR,ip)){
+            throw new ApiManageException(IP_INVALID);
+        }
+    }
+    private void checkRole(String roleName){
+        for(RoleEnum role:RoleEnum.values()){
+            if (role.getName().equals(roleName))
+                return;
+        }
+        throw new ApiManageException(ROLE_NOT_EXIST);
+    }
+    private void checkAuthCode(String usage, String phone, String authCode){
         List<String> cacheAuthCode = getCacheAuthCode(usage, phone);
         for(String code : cacheAuthCode){
             if (code.equals(authCode)) {
@@ -161,22 +276,22 @@ public class UserServiceImpl implements UserService {
      * 校验该ip和手机号是否处于被限制的状态
      * @param usage
      * @param phone
-     * @param ip
      */
-    private void checkLimited(String usage, String phone, String ip){
+    private void checkPhoneLimited(String usage, String phone){
         String phoneCode = generateRedisCode(usage,PHONE,phone);
-        String ipCode = generateRedisCode(usage,IP,ip);
-        // 批量执行
-        RBatch batch = redissonClient.createBatch();
-        batch.getBucket(phoneCode).getAsync();
-        batch.getBucket(ipCode).getAsync();
-        BatchResult<?> batchResult = batch.execute();
-        for (Object response : batchResult.getResponses()) {
-            if (ObjectUtil.isNotNull(response)){
-                throw new ApiManageException(SEND_AUTH_CODE_IS_LIMITED);
-            }
-        }
+        RBucket<Object> bucket = redissonClient.getBucket(phoneCode);
 
+        if (ObjectUtil.isNotNull(bucket.get())){
+            throw new ApiManageException(SEND_AUTH_CODE_IS_LIMITED);
+        }
+    }
+
+    private void checkIPLimited(String usage, String ip){
+        String ipCode = generateRedisCode(usage,IP,ip);
+        RBucket<Object> bucket = redissonClient.getBucket(ipCode);
+        if (ObjectUtil.isNotNull(bucket.get())){
+            throw new ApiManageException(SEND_AUTH_CODE_IS_LIMITED);
+        }
     }
 
     /**
@@ -267,24 +382,29 @@ public class UserServiceImpl implements UserService {
         return DateUtil.date().offset(MINUTE,interval).getTime();
     }
     /**
-     * 限制指定ip和phone在1分钟内不能发送验证码
+     * 限制指定phone在1分钟内不能发送验证码
      * @param usage
      * @param phone
-     * @param ip
      */
-    private void limitSend(String usage, String phone, String ip){
+    private void limitPhoneSend(String usage, String phone){
         String phoneCode = generateRedisCode(usage,PHONE,phone);
-        String ipCode = generateRedisCode(usage,IP,ip);
         // 批量执行
         RBatch batch = redissonClient.createBatch();
         RBucketAsync<Object> phoneBucket = batch.getBucket(phoneCode);
         phoneBucket.setAsync(USELESS_VALUE);
         phoneBucket.expireAsync(Duration.ofMinutes(SEND_AUTH_CODE_INTERVAL));
-        RBucketAsync<Object> ipBucket = batch.getBucket(ipCode);
-        ipBucket.setAsync(USELESS_VALUE);
-        ipBucket.expireAsync(Duration.ofMinutes(SEND_AUTH_CODE_INTERVAL));
         batch.execute();
     }
+    private void limitIPSend(String usage, String ip){
+        String ipCode = generateRedisCode(usage,IP,ip);
+        // 批量执行
+        RBatch batch = redissonClient.createBatch();
+        RBucketAsync<Object> phoneBucket = batch.getBucket(ipCode);
+        phoneBucket.setAsync(USELESS_VALUE);
+        phoneBucket.expireAsync(Duration.ofMinutes(SEND_AUTH_CODE_INTERVAL));
+        batch.execute();
+    }
+
 
     /**
      * 拼接 时间戳和验证码
