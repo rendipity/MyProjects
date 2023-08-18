@@ -9,7 +9,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -80,7 +79,7 @@ public class UserController {
     /**
      * 查看appKey、secretKey
      */
-    @GetMapping("/key")
+    @GetMapping("/authentication")
     public Result<UserKeyVO> getUserKey(String authCode){
         return Result.success(userService.getUserKey(authCode));
     }
@@ -88,7 +87,7 @@ public class UserController {
     /**
      * 重置appKey、secretKey
      */
-    @GetMapping
+    @GetMapping("/authentication/reset")
     public Result<UserKeyVO> resetUserKey(String authCode){
         return Result.success(userService.resetUserKey(authCode));
     }

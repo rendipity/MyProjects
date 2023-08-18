@@ -130,11 +130,10 @@ public class UserServiceImpl implements UserService {
         if (ObjectUtil.isEmpty(user)||!user.getPassword().equals(loginUserVO.getPassword())){
             throw new ApiManageException(USERNAME_OR_PASSWORD_ERROR);
         }
-        UserInfo userInfo = new UserInfo();
-        userInfo.setUsername(user.getUsername());
-        userInfo.setRole(user.getRole());
-        userInfo.setPhone(user.getPhone());
-        return TokenUtil.generate(userInfo);
+        // 保存当前登陆时间
+        user.setLastLoginTime(DateUtil.date());
+        userDomainService.updateUserById(user);
+        return TokenUtil.generate(userConvert.modal2UserInfo(user));
     }
 
     @Override

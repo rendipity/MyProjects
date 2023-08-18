@@ -1,6 +1,7 @@
 package com.publicapi.apimanage.biz.convert;
 
 import com.publicapi.apimanage.biz.bo.ApiUser;
+import com.publicapi.apimanage.common.UserInfo;
 import com.publicapi.apimanage.dao.DO.ApiUserDO;
 import com.publicapi.apimanage.web.vo.user.RegisterUserVO;
 import com.publicapi.apimanage.web.vo.user.UserDetailsVO;
@@ -30,4 +31,6 @@ public interface ApiUserConvert {
 
 
     UserKeyVO modal2KeyVO(ApiUser user);
+
+    UserInfo modal2UserInfo(ApiUser user);
 }
