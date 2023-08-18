@@ -1,6 +1,7 @@
 package com.publicapi.apimanage.web.controller;
 
 import com.publicapi.apimanage.biz.service.UserService;
+import com.publicapi.apimanage.common.CommonPage;
 import com.publicapi.apimanage.common.Result;
 import com.publicapi.apimanage.common.query.UserPageQuery;
 import com.publicapi.apimanage.web.vo.user.*;
@@ -42,30 +43,30 @@ public class UserController {
     //修改密码
     @PostMapping("/password/update")
     public Result<Boolean> updatePassword(@RequestBody @Validated UpdatePasswordVO updatePasswordVO){
-        return null;
+        return Result.success(userService.updatePassword(updatePasswordVO));
     }
 
     // 获取当前用户详情
     @GetMapping("/details")
     public Result<UserDetailsVO> getUser(){
-        return null;
+        return Result.success(userService.getUser());
     }
 
     // 编辑用户信息 头像，用户名
     @PostMapping("/userinfo/update")
-    public Result<UserDetailsVO> updateUserInfo(@RequestBody @Validated UpdateUserInfoVO updateUser){
-            return null;
+    public Result<Boolean> updateUserInfo(@RequestBody @Validated UpdateUserInfoVO updateUser){
+            return Result.success(userService.updateUserInfo(updateUser));
     }
     // 修改角色
     @PostMapping("/role/update")
     public Result<Boolean> updateRole(@RequestBody @Validated UpdateRoleVO updateRoleVO){
-        return null;
+        return Result.success(userService.updateRole(updateRoleVO));
     }
 
     // 用户列表
     @GetMapping("/list")
-    public Result<List<UserPageVO>> userList(UserPageQuery userPageQuery){
-        return null;
+    public Result<CommonPage<UserPageVO>> userList(UserPageQuery userPageQuery){
+        return Result.success(userService.userList(userPageQuery));
     }
 
     /**
@@ -81,7 +82,7 @@ public class UserController {
      */
     @GetMapping("/key")
     public Result<UserKeyVO> getUserKey(String authCode){
-        return null;
+        return Result.success(userService.getUserKey(authCode));
     }
 
     /**
@@ -89,7 +90,7 @@ public class UserController {
      */
     @GetMapping
     public Result<UserKeyVO> resetUserKey(String authCode){
-        return null;
+        return Result.success(userService.resetUserKey(authCode));
     }
 
 }
