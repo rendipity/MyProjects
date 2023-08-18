@@ -101,6 +101,7 @@ public class ApiServiceImpl implements ApiService {
 
     @Override
     public Boolean updateApi(ApiResource apiResource) {
+        // todo 开发者只能编辑自己上传的接口  管理员可以编辑所有接口
         // 校验该api是否存在
         ApiResourceDO apiResourceDO = apiResourceRepository.getOne(Wrappers.<ApiResourceDO>lambdaQuery()
                 .eq(ApiResourceDO::getCode, apiResource.getCode()));

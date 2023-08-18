@@ -16,7 +16,7 @@ public class TokenUtil {
                 .setPayload("username",userInfo.getUsername())
                 .setPayload("role",userInfo.getRole())
                 .setPayload("phone",userInfo.getPhone())
-                .setExpiresAt(DateUtil.date().offset(DateField.HOUR,2))
+                .setExpiresAt(DateUtil.date().offset(DateField.HOUR,24*3)) // 3天过期
                 .setKey(SECRET.getBytes())
                 .sign();
     }

@@ -1,11 +1,13 @@
 package com.publicapi.apimanage.web.controller;
 
 import cn.hutool.core.util.StrUtil;
+import com.publicapi.apimanage.biz.constants.RoleEnum;
 import com.publicapi.apimanage.biz.service.UserService;
 import com.publicapi.apimanage.common.CommonPage;
 import com.publicapi.apimanage.common.Result;
 import com.publicapi.apimanage.common.exception.ApiManageException;
 import com.publicapi.apimanage.common.query.UserPageQuery;
+import com.publicapi.apimanage.web.exception.AccessControl;
 import com.publicapi.apimanage.web.vo.user.*;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -33,45 +35,45 @@ public class UserController {
         String ip = "127.0.0.1";
         return Result.success(userService.sendRegisterAuthCode(phone,ip));
     }
-    // 注册
+    /**
+     * 注册
+     */
     @PostMapping("/register")
     public Result<Boolean> register(@RequestBody @Validated RegisterUserVO registerUserVO){
         return Result.success(userService.register(registerUserVO));
     }
 
-    // 登陆
+    /**
+     * 登陆
+     */
     @PostMapping("/login")
     public Result<String> login(@RequestBody @Validated LoginUserVO loginUserVO){
         return Result.success(userService.login(loginUserVO));
     }
 
-    //修改密码
+    /**
+     * 修改密码
+     */
     @PostMapping("/password/update")
     public Result<Boolean> updatePassword(@RequestBody @Validated UpdatePasswordVO updatePasswordVO){
         return Result.success(userService.updatePassword(updatePasswordVO));
     }
 
-    // 获取当前用户详情
+    /**
+     *  获取当前用户详情
+     */
+
     @GetMapping("/details")
     public Result<UserDetailsVO> getUser(){
         return Result.success(userService.getUser());
     }
 
-    // 编辑用户信息 头像，用户名
+    /**
+     *  编辑用户头像，用户名
+     */
     @PostMapping("/userinfo/update")
     public Result<Boolean> updateUserInfo(@RequestBody @Validated UpdateUserInfoVO updateUser){
             return Result.success(userService.updateUserInfo(updateUser));
-    }
-    // 修改角色
-    @PostMapping("/role/update")
-    public Result<Boolean> updateRole(@RequestBody @Validated UpdateRoleVO updateRoleVO){
-        return Result.success(userService.updateRole(updateRoleVO));
-    }
-
-    // 用户列表
-    @GetMapping("/list")
-    public Result<CommonPage<UserPageVO>> userList(UserPageQuery userPageQuery){
-        return Result.success(userService.userList(userPageQuery));
     }
 
     /**
@@ -102,6 +104,26 @@ public class UserController {
             throw new ApiManageException(AUTH_CODE_IS_EMPTY);
         }
         return Result.success(userService.resetUserKey(authCode));
+    }
+
+    // 管理员接口
+
+    /**
+     * 修改角色
+     */
+    @PostMapping("/role/update")
+    @AccessControl(RoleEnum.ADMIN)
+    public Result<Boolean> updateRole(@RequestBody @Validated UpdateRoleVO updateRoleVO){
+        return Result.success(userService.updateRole(updateRoleVO));
+    }
+
+    /**
+     * 用户列表
+     */
+    @GetMapping("/list")
+    @AccessControl(RoleEnum.ADMIN)
+    public Result<CommonPage<UserPageVO>> userList(UserPageQuery userPageQuery){
+        return Result.success(userService.userList(userPageQuery));
     }
 
 }

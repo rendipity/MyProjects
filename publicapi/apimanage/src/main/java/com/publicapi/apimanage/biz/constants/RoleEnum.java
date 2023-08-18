@@ -16,4 +16,13 @@ public enum RoleEnum {
     private String name;
 
     private Integer value;
+
+    public static RoleEnum getByName(String roleName){
+        for(RoleEnum role: RoleEnum.values()){
+            if (role.getName().equals(roleName))
+                return role;
+        }
+        return USER;
+    }
+
 }
