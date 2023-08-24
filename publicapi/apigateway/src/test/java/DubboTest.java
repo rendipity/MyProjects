@@ -1,6 +1,7 @@
 import com.publicapi.GatewayApplicationStarter;
-import com.publicapi.dynamicroute.dubboclient.ApiClient;
+import com.publicapi.dubboclient.ApiClient;
 import com.publicapi.modal.api.ApiResourceDTO;
+import com.publicapi.util.ResultUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,7 +18,7 @@ public class DubboTest {
     private ApiClient client;
     @Test
     public void listApiTest(){
-        List<ApiResourceDTO> apiResourceDTOS = client.listApiResource();
+        List<ApiResourceDTO> apiResourceDTOS = ResultUtil.isSuccess(client.listApiResource());
         apiResourceDTOS.forEach(System.out::println);
     }
 }

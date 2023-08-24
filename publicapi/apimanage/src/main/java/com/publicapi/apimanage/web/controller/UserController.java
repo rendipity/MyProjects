@@ -3,19 +3,19 @@ package com.publicapi.apimanage.web.controller;
 import cn.hutool.core.util.StrUtil;
 import com.publicapi.apimanage.biz.constants.RoleEnum;
 import com.publicapi.apimanage.biz.service.UserService;
-import com.publicapi.apimanage.common.CommonPage;
-import com.publicapi.apimanage.common.Result;
-import com.publicapi.apimanage.common.exception.ApiManageException;
 import com.publicapi.apimanage.common.query.UserPageQuery;
 import com.publicapi.apimanage.web.exception.AccessControl;
 import com.publicapi.apimanage.web.vo.user.*;
+import com.publicapi.exception.ApiManageException;
+import com.publicapi.modal.CommonPage;
+import com.publicapi.modal.Result;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.constraints.NotEmpty;
 
-import static com.publicapi.apimanage.common.enums.ErrorResultEnum.AUTH_CODE_IS_EMPTY;
+import static com.publicapi.enums.ErrorResultEnum.AUTH_CODE_IS_EMPTY;
 
 @RestController
 @RequestMapping("/user")

@@ -4,17 +4,17 @@ import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.http.ContentType;
 import cn.hutool.json.JSONUtil;
-import com.publicapi.apimanage.common.Result;
 import com.publicapi.apimanage.common.UserContext;
 import com.publicapi.apimanage.common.UserInfo;
 import com.publicapi.apimanage.common.utils.TokenUtil;
+import com.publicapi.modal.Result;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.publicapi.apimanage.common.enums.ErrorResultEnum.TOKEN_INVALID;
+import static com.publicapi.enums.ErrorResultEnum.TOKEN_INVALID;
 
 public class JwtAuthenticationInterceptor implements HandlerInterceptor {
 

@@ -4,12 +4,15 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.publicapi.apimanage.common.CommonPage;
+import com.publicapi.apimanage.common.query.UserListQuery;
 import com.publicapi.apimanage.common.query.UserPageQuery;
 import com.publicapi.apimanage.dao.DO.ApiUserDO;
 import com.publicapi.apimanage.dao.mapper.ApiUserMapper;
 import com.publicapi.apimanage.dao.repository.ApiUserRepository;
+import com.publicapi.modal.CommonPage;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
 * @author chenxinyu
@@ -29,6 +32,15 @@ public class ApiUserRepositoryImpl extends ServiceImpl<ApiUserMapper, ApiUserDO>
                         .eq(StrUtil.isNotBlank(userPageQuery.getRole()), ApiUserDO::getRole, userPageQuery.getRole())
                         .eq(StrUtil.isNotBlank(userPageQuery.getStatus()), ApiUserDO::getStatus, userPageQuery.getStatus()));
         return CommonPage.build(userPageQuery.getPageNum(), userPageQuery.getPageSize(), userDOPage.getPages(),userDOPage.getTotal(),userDOPage.getRecords());
+    }
+
+    @Override
+    public List<ApiUserDO> listUser(UserListQuery userListQuery) {
+        return list(Wrappers.<ApiUserDO>lambdaQuery()
+                .like(StrUtil.isNotBlank(userListQuery.getUsername()), ApiUserDO::getUsername, userListQuery.getUsername())
+                .like(StrUtil.isNotBlank(userListQuery.getPhone()), ApiUserDO::getPhone, userListQuery.getPhone())
+                .eq(StrUtil.isNotBlank(userListQuery.getRole()), ApiUserDO::getRole, userListQuery.getRole())
+                .eq(StrUtil.isNotBlank(userListQuery.getStatus()), ApiUserDO::getStatus, userListQuery.getStatus()));
     }
 }
 

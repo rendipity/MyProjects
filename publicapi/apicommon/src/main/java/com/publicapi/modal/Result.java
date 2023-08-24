@@ -1,12 +1,14 @@
-package com.publicapi.apimanage.common;
+package com.publicapi.modal;
 
-import com.publicapi.apimanage.common.enums.ErrorResultEnum;
+
+import com.publicapi.enums.ErrorResultEnum;
 import lombok.Data;
 
-import java.sql.Statement;
+import java.io.Serializable;
 
 @Data
-public class Result <T> {
+public class Result<T> implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     private Boolean success;
     private String errorCode;

@@ -1,9 +1,9 @@
 package com.publicapi.apimanage.biz.service;
 
 
-import com.publicapi.apimanage.common.CommonPage;
 import com.publicapi.apimanage.common.query.UserPageQuery;
 import com.publicapi.apimanage.web.vo.user.*;
+import com.publicapi.modal.CommonPage;
 import org.springframework.stereotype.Service;
 
 @Service

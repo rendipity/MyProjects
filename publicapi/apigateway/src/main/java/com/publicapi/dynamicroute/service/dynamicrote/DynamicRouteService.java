@@ -1,10 +1,11 @@
 package com.publicapi.dynamicroute.service.dynamicrote;
 
 
+import com.publicapi.dubboclient.ApiClient;
 import com.publicapi.dynamicroute.apimodal.ApiResource;
-import com.publicapi.dynamicroute.dubboclient.ApiClient;
 import com.publicapi.dynamicroute.service.dynamicrote.convert.ApiResourceConvert;
 import com.publicapi.modal.api.ApiResourceDTO;
+import com.publicapi.util.ResultUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.event.RefreshRoutesEvent;
 import org.springframework.cloud.gateway.filter.FilterDefinition;
@@ -48,7 +49,7 @@ public class DynamicRouteService implements ApplicationEventPublisherAware {
 
     public void init(){
         log.info("init 执行了");
-        List<ApiResourceDTO> apiResourceDTOS = apiClient.listApiResource();
+        List<ApiResourceDTO> apiResourceDTOS = ResultUtil.isSuccess(apiClient.listApiResource());
         apiResourceDTOS.forEach(apiDto->{
             addRoute(apiResourceConvert.dto2modal(apiDto));
         });

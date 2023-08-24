@@ -1,9 +1,12 @@
 package com.publicapi.apimanage.dao.repository;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.publicapi.apimanage.common.CommonPage;
+import com.publicapi.apimanage.common.query.UserListQuery;
 import com.publicapi.apimanage.common.query.UserPageQuery;
 import com.publicapi.apimanage.dao.DO.ApiUserDO;
+import com.publicapi.modal.CommonPage;
+
+import java.util.List;
 
 /**
 * @author chenxinyu
@@ -13,4 +16,6 @@ import com.publicapi.apimanage.dao.DO.ApiUserDO;
 public interface ApiUserRepository extends IService<ApiUserDO> {
 
     CommonPage<ApiUserDO> pageUser(UserPageQuery userPageQuery);
+
+    List<ApiUserDO> listUser(UserListQuery userListQuery);
 }

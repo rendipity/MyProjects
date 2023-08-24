@@ -1,6 +1,6 @@
-package com.publicapi.apimanage.common.exception;
+package com.publicapi.exception;
 
-import com.publicapi.apimanage.common.enums.ErrorResultEnum;
+import com.publicapi.enums.ErrorResultEnum;
 import lombok.Data;
 
 @Data

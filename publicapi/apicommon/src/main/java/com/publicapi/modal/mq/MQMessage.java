@@ -1,6 +1,5 @@
 package com.publicapi.modal.mq;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.io.Serializable;

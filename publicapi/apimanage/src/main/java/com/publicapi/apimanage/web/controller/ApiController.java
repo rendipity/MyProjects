@@ -1,12 +1,9 @@
 package com.publicapi.apimanage.web.controller;
 
-import com.aliyun.teautil.Common;
 import com.publicapi.apimanage.biz.bo.ApiResource;
 import com.publicapi.apimanage.biz.constants.RoleEnum;
 import com.publicapi.apimanage.biz.convert.ApiResourceConvert;
 import com.publicapi.apimanage.biz.service.ApiService;
-import com.publicapi.apimanage.common.CommonPage;
-import com.publicapi.apimanage.common.Result;
 import com.publicapi.apimanage.common.qto.ApiEvent;
 import com.publicapi.apimanage.common.qto.ApiPageQuery;
 import com.publicapi.apimanage.web.exception.AccessControl;
@@ -14,6 +11,8 @@ import com.publicapi.apimanage.web.vo.api.AddApiVO;
 import com.publicapi.apimanage.web.vo.api.DetailsApiVO;
 import com.publicapi.apimanage.web.vo.api.ListApiVO;
 import com.publicapi.apimanage.web.vo.api.UpdateApiVO;
+import com.publicapi.modal.CommonPage;
+import com.publicapi.modal.Result;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -23,10 +22,10 @@ import javax.annotation.Resource;
 public class ApiController {
 
     @Resource
-    ApiService apiService;
+    private ApiService apiService;
 
     @Resource
-    ApiResourceConvert apiResourceConvert;
+    private ApiResourceConvert apiResourceConvert;
 
     /**
      * 新增api

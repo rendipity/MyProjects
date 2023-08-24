@@ -1,8 +1,5 @@
 package reactor.observer.pull;
 
-import reactor.observer.push.Child;
-import reactor.observer.push.Weather;
-
 import java.util.Observable;
 import java.util.Observer;
 

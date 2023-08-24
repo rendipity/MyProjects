@@ -1,4 +1,4 @@
-package com.publicapi.apimanage.common.enums;
+package com.publicapi.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,6 +29,14 @@ public enum ErrorResultEnum {
     PHONE_INVALID("00032","手机号不合法"),
     IP_INVALID("00033","IP不合法"),
     AUTH_CODE_IS_EMPTY("00034","验证码不能为空"),
+
+
+    // gateway
+    RPC_SERVICE_EXCEPTION("00101","系统异常"),
+    APP_KEY_NOT_EXIST("00102","认证信息不存在"),
+    TIMESTAMP_INVALID("00103","时间戳不合法"),
+    SIGN_INVALID("00104","签名不合法"),
+    REQUEST_REPEAT("00105","请勿重复请求"),
     ;
     private String errorCode;
     private String errorMessage;

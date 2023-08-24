@@ -7,7 +7,9 @@ import com.publicapi.apimanage.web.vo.user.RegisterUserVO;
 import com.publicapi.apimanage.web.vo.user.UserDetailsVO;
 import com.publicapi.apimanage.web.vo.user.UserKeyVO;
 import com.publicapi.apimanage.web.vo.user.UserPageVO;
+import com.publicapi.modal.authentication.UserAuthDTO;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 
 import java.util.List;
@@ -29,8 +31,13 @@ public interface ApiUserConvert {
 
     UserDetailsVO modal2DetailsVo(ApiUser user);
 
-
     UserKeyVO modal2KeyVO(ApiUser user);
 
     UserInfo modal2UserInfo(ApiUser user);
+
+    @Mapping(source = "id",target = "userId")
+    @Mapping(source = "appKey",target = "secretKey")
+    UserAuthDTO modal2UserAuthDto(ApiUser user);
+
+    List<UserAuthDTO> listModal2UserAuthDto(List<ApiUser> user);
 }

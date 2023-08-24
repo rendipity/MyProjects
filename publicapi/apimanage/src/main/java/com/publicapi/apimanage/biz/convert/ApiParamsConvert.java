@@ -1,9 +1,7 @@
 package com.publicapi.apimanage.biz.convert;
 
 import com.publicapi.apimanage.biz.bo.ApiParams;
-import com.publicapi.apimanage.biz.bo.ApiResource;
 import com.publicapi.apimanage.dao.DO.ApiParamsDO;
-import com.publicapi.modal.api.ApiResourceDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 

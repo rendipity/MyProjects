@@ -1,10 +1,10 @@
 package com.publicapi.apimanage.biz.service;
 
 import com.publicapi.apimanage.biz.bo.ApiResource;
-import com.publicapi.apimanage.common.CommonPage;
 import com.publicapi.apimanage.common.qto.ApiEvent;
 import com.publicapi.apimanage.common.qto.ApiListQuery;
 import com.publicapi.apimanage.common.qto.ApiPageQuery;
+import com.publicapi.modal.CommonPage;
 
 import java.util.List;
 

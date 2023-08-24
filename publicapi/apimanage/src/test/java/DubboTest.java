@@ -1,6 +1,7 @@
 import com.publicapi.apimanage.ApiManageApplicationStarter;
 import com.publicapi.facade.ApiFacade;
 import com.publicapi.modal.api.ApiResourceDTO;
+import com.publicapi.util.ResultUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,7 +18,7 @@ public class DubboTest {
     private ApiFacade apiFacade;
     @Test
     public void listApiTest(){
-        List<ApiResourceDTO> apiResourceDTOS = apiFacade.listApi();
+        List<ApiResourceDTO> apiResourceDTOS = ResultUtil.isSuccess(apiFacade.listApi());
         apiResourceDTOS.forEach(System.out::println);
     }
 

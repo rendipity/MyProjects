@@ -2,7 +2,7 @@ package com.publicapi.apimanage.web.controller;
 
 
 import com.publicapi.apimanage.biz.service.CommonService;
-import com.publicapi.apimanage.common.Result;
+import com.publicapi.modal.Result;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;

@@ -3,14 +3,16 @@ package com.publicapi.apimanage.core.service.user.impl;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.publicapi.apimanage.biz.bo.ApiUser;
 import com.publicapi.apimanage.biz.convert.ApiUserConvert;
-import com.publicapi.apimanage.common.CommonPage;
+import com.publicapi.apimanage.common.query.UserListQuery;
 import com.publicapi.apimanage.common.query.UserPageQuery;
 import com.publicapi.apimanage.core.service.user.UserDomainService;
 import com.publicapi.apimanage.dao.DO.ApiUserDO;
 import com.publicapi.apimanage.dao.repository.ApiUserRepository;
+import com.publicapi.modal.CommonPage;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 
 @Service
@@ -40,6 +42,12 @@ public class UserDomainServiceImpl implements UserDomainService {
     }
 
     @Override
+    public ApiUser getUserByAppKey(String appKey) {
+        ApiUserDO apiUserDO = userRepository.getOne(Wrappers.<ApiUserDO>lambdaQuery().eq(ApiUserDO::getAppKey, appKey));
+        return userConvert.do2Modal(apiUserDO);
+    }
+
+    @Override
     public Boolean updateUserById(ApiUser user) {
         return userRepository.updateById(userConvert.modal2DO(user));
     }
@@ -48,5 +56,11 @@ public class UserDomainServiceImpl implements UserDomainService {
     public CommonPage<ApiUser> pageUser(UserPageQuery pageQuery) {
         CommonPage<ApiUserDO> userDOCommonPage = userRepository.pageUser(pageQuery);
         return CommonPage.convert(userDOCommonPage,userConvert.listDo2Modal(userDOCommonPage.getLists()));
+    }
+
+    @Override
+    public List<ApiUser> listAllUser(UserListQuery listQuery) {
+        List<ApiUserDO> userDOS = userRepository.listUser(listQuery);
+        return userConvert.listDo2Modal(userDOS);
     }
 }

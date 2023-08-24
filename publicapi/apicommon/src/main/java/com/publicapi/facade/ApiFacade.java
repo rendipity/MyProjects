@@ -1,9 +1,10 @@
 package com.publicapi.facade;
 
+import com.publicapi.modal.Result;
 import com.publicapi.modal.api.ApiResourceDTO;
 
 import java.util.List;
 
 public interface ApiFacade {
-    List<ApiResourceDTO> listApi();
+    Result<List<ApiResourceDTO>> listApi();
 }

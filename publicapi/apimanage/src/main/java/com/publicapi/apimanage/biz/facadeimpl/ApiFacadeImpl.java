@@ -5,6 +5,7 @@ import com.publicapi.apimanage.biz.convert.ApiResourceConvert;
 import com.publicapi.apimanage.biz.service.ApiService;
 import com.publicapi.apimanage.common.qto.ApiListQuery;
 import com.publicapi.facade.ApiFacade;
+import com.publicapi.modal.Result;
 import com.publicapi.modal.api.ApiResourceDTO;
 import org.apache.dubbo.config.annotation.DubboService;
 
@@ -23,10 +24,10 @@ public class ApiFacadeImpl implements ApiFacade {
     private ApiResourceConvert apiConvert;
 
     @Override
-    public List<ApiResourceDTO> listApi() {
+    public Result<List<ApiResourceDTO>> listApi() {
         ApiListQuery listQuery = new ApiListQuery();
         listQuery.setStatus(ENABLE);
         List<ApiResource> apiResources = apiService.listApi(listQuery);
-        return apiConvert.listModal2Dto(apiResources);
+        return Result.success(apiConvert.listModal2Dto(apiResources));
     }
 }

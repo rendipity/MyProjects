@@ -1,6 +1,5 @@
 package com.publicapi.apimanage.biz.bo;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
 import java.util.Date;

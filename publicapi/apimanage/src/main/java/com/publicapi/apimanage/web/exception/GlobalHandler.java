@@ -1,17 +1,16 @@
 package com.publicapi.apimanage.web.exception;
 
-import com.publicapi.apimanage.common.Result;
-import com.publicapi.apimanage.common.exception.ApiManageException;
+import com.publicapi.exception.ApiManageException;
+import com.publicapi.modal.Result;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-
 import java.util.Set;
 
-import static com.publicapi.apimanage.common.enums.ErrorResultEnum.PARAMETER_EXCEPTION;
-import static com.publicapi.apimanage.common.enums.ErrorResultEnum.SYSTEM_EXCEPTION;
+import static com.publicapi.enums.ErrorResultEnum.PARAMETER_EXCEPTION;
+import static com.publicapi.enums.ErrorResultEnum.SYSTEM_EXCEPTION;
 
 @RestControllerAdvice
 public class GlobalHandler {

@@ -1,12 +1,13 @@
-package com.publicapi.apimanage.common;
+package com.publicapi.modal;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Data
-public class CommonPage <T> {
-
+public class CommonPage<T> implements Serializable {
+    private static final long serialVersionUID = 1L;
     private Integer pageNum;
 
     private Integer pageSize;

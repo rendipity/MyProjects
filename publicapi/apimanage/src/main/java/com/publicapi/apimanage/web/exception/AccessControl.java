@@ -2,7 +2,6 @@ package com.publicapi.apimanage.web.exception;
 
 
 import com.publicapi.apimanage.biz.constants.RoleEnum;
-import lombok.Data;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

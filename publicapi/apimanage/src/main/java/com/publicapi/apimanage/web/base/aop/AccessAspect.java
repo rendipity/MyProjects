@@ -1,11 +1,11 @@
 package com.publicapi.apimanage.web.base.aop;
 
 import com.publicapi.apimanage.biz.constants.RoleEnum;
-import com.publicapi.apimanage.common.Result;
 import com.publicapi.apimanage.common.UserContext;
 import com.publicapi.apimanage.common.UserInfo;
-import com.publicapi.apimanage.common.enums.ErrorResultEnum;
 import com.publicapi.apimanage.web.exception.AccessControl;
+import com.publicapi.enums.ErrorResultEnum;
+import com.publicapi.modal.Result;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
