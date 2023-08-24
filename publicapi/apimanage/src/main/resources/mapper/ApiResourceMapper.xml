@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.publicapi.apimanage.dao.mapper.ApiResourceMapper">
+
+    <resultMap id="BaseResultMap" type="com.publicapi.apimanage.dao.DO.ApiResourceDO">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="code" column="code" jdbcType="VARCHAR"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="description" column="description" jdbcType="VARCHAR"/>
+            <result property="httpMethod" column="http_method" jdbcType="VARCHAR"/>
+            <result property="protocol" column="protocol" jdbcType="VARCHAR"/>
+            <result property="host" column="host" jdbcType="VARCHAR"/>
+            <result property="path" column="path" jdbcType="VARCHAR"/>
+            <result property="groupCode" column="group_code" jdbcType="VARCHAR"/>
+            <result property="requestDemo" column="request_demo" jdbcType="VARCHAR"/>
+            <result property="responseDemo" column="response_demo" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="creator" column="creator" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="VARCHAR"/>
+            <result property="isDelete" column="is_delete" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,code,name,description,
+        http_method,protocol,host,
+        path,groupCode,request_demo,response_demo,
+        create_time,creator,status,
+        is_delete
+    </sql>
+</mapper>

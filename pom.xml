@@ -13,6 +13,7 @@
         <module>mySpring</module>
         <module>JUC</module>
         <module>netty</module>
+        <module>publicApi</module>
     </modules>
 
     <properties>

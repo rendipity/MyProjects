@@ -1,0 +1,42 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: gatewaydemo
+  cloud:
+    gateway:
+      routes:
+        ###路由id
+        #- id: hello-router
+          ####转发http://www.gblfy.com/
+        #  uri: http://localhost:8001/serviceapi/hello
+          ###匹配规则
+        #  predicates:
+        #   - Path=/serviceapi/hello
+        #   - Method=GET
+             #dubbo
+  redis:
+    url: 127.0.0.1:6379
+    # username:
+    # password:
+    database: 0
+dubbo:
+  application:
+    name: ${spring.application.name}
+  registry:
+    address: nacos://127.0.0.1:8848
+    #parameters:
+    #  namespace: ${spring.cloud.nacos.discovery.namespace}
+  protocol:
+    port: 20880
+    name: dubbo
+
+  #provider:
+  #  timeout: 3000
+  #  retries: 0
+  #  check: false
+  consumer:
+    timeout: 3000
+    retries: 0
+    check: false
