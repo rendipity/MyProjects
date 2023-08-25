@@ -7,10 +7,7 @@ import com.publicapi.apimanage.biz.service.ApiService;
 import com.publicapi.apimanage.common.qto.ApiEvent;
 import com.publicapi.apimanage.common.qto.ApiPageQuery;
 import com.publicapi.apimanage.web.exception.AccessControl;
-import com.publicapi.apimanage.web.vo.api.AddApiVO;
-import com.publicapi.apimanage.web.vo.api.DetailsApiVO;
-import com.publicapi.apimanage.web.vo.api.ListApiVO;
-import com.publicapi.apimanage.web.vo.api.UpdateApiVO;
+import com.publicapi.apimanage.web.vo.api.*;
 import com.publicapi.modal.CommonPage;
 import com.publicapi.modal.Result;
 import org.springframework.web.bind.annotation.*;
@@ -82,6 +79,13 @@ public class ApiController {
     public Result<Boolean> removeApi(String apiCode){
         // todo 开发者只能删除自己上传的接口  管理员可以删除所有接口
         return Result.success(apiService.removeApi(apiCode));
+    }
+
+    // todo 申请调用次数接口
+    @GetMapping("/apply")
+    public Result<Boolean> applyApi(ApplyApiVO applyApiVO){
+        // todo 开发者只能删除自己上传的接口  管理员可以删除所有接口
+        return Result.success(null);
     }
 
 }

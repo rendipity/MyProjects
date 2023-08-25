@@ -41,4 +41,6 @@ public interface ApiService {
      * 删除api
      */
     public Boolean removeApi(String apiCode);
+
+    Boolean invokeResource(String username, String apiCode);
 }

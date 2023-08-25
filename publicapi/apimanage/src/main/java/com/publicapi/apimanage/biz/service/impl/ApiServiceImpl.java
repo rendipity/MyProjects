@@ -18,8 +18,10 @@ import com.publicapi.apimanage.common.utils.CodeUtil;
 import com.publicapi.apimanage.core.service.mq.MqService;
 import com.publicapi.apimanage.dao.DO.ApiParamsDO;
 import com.publicapi.apimanage.dao.DO.ApiResourceDO;
+import com.publicapi.apimanage.dao.DO.InvokeInfoDO;
 import com.publicapi.apimanage.dao.repository.ApiParamsRepository;
 import com.publicapi.apimanage.dao.repository.ApiResourceRepository;
+import com.publicapi.apimanage.dao.repository.InvokeInfoRepository;
 import com.publicapi.exception.ApiManageException;
 import com.publicapi.modal.CommonPage;
 import org.springframework.stereotype.Service;
@@ -61,6 +63,9 @@ public class ApiServiceImpl implements ApiService {
 
     @Resource
     private MqService mqService;
+
+    @Resource
+    private InvokeInfoRepository invokeInfoRepository;
 
     @Override
     public String createApi(ApiResource apiResource) {
@@ -206,5 +211,17 @@ public class ApiServiceImpl implements ApiService {
         ApiResourceDO api = apiResourceRepository.getOne(apiResource.getProtocol(), apiResource.getHost(), apiResource.getPath());
         if (ObjectUtil.isNotNull(api))
             throw new ApiManageException(URL_DUPLICATION);
+    }
+
+    @Override
+    public Boolean invokeResource(String username, String apiCode) {
+        // todo 加锁，原子操作避免并发的错误
+        InvokeInfoDO invokeInfo = invokeInfoRepository.getOne(username);
+        if (ObjectUtil.isNotEmpty(invokeInfo)&&invokeInfo.getInvokeTimes()<invokeInfo.getTotalTimes()){
+            invokeInfo.setInvokeTimes(invokeInfo.getInvokeTimes()+1);
+            invokeInfoRepository.updateById(invokeInfo);
+            return true;
+        }
+        return false;
     }
 }

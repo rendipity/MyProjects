@@ -13,6 +13,8 @@ import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
 
+import static com.publicapi.enums.ErrorResultEnum.SYSTEM_EXCEPTION;
+
 @Slf4j
 @Order(-1)
 @Component
@@ -22,9 +24,14 @@ public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
     public Mono<Void> handle(ServerWebExchange exchange, Throwable ex) {
         if (ex instanceof ApiManageException) {
             ApiManageException dynamicRouteException = (ApiManageException)ex;
+            ex.printStackTrace();
             return printResponse(exchange.getResponse(),Result.fail(dynamicRouteException.getErrorCode(),dynamicRouteException.getErrorMessage()));
         }
-        return Mono.error(ex);
+        else{
+            Exception exception = (Exception)ex;
+            ex.printStackTrace();
+            return printResponse(exchange.getResponse(),Result.fail(SYSTEM_EXCEPTION));
+        }
     }
 
     private Mono<Void> printResponse(ServerHttpResponse response,Result<Object> result){

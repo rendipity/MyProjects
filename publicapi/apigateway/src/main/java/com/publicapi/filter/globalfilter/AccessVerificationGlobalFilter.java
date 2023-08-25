@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static com.publicapi.constant.AccessConstant.*;
-import static com.publicapi.constant.FilterOrder.ACCESS_VERIFICATION_GLOBALFILTER;
+import static com.publicapi.constant.FilterOrder.ACCESS_VERIFICATION_GLOBAL_FILTER;
 import static com.publicapi.enums.ErrorResultEnum.*;
 
 
@@ -97,7 +97,7 @@ public class AccessVerificationGlobalFilter implements GlobalFilter, Ordered {
 
     @Override
     public int getOrder() {
-        return ACCESS_VERIFICATION_GLOBALFILTER;
+        return ACCESS_VERIFICATION_GLOBAL_FILTER;
     }
     // name=zhangsan&param1=value1&param2=value2
     private void getParams(String query, HashMap<String,String> paramsMap){

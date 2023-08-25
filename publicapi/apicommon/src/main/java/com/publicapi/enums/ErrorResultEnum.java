@@ -37,6 +37,7 @@ public enum ErrorResultEnum {
     TIMESTAMP_INVALID("00103","时间戳不合法"),
     SIGN_INVALID("00104","签名不合法"),
     REQUEST_REPEAT("00105","请勿重复请求"),
+    INVOKE_TIME_NOT_ENOUGH("00106","调用次数已耗尽"),
     ;
     private String errorCode;
     private String errorMessage;

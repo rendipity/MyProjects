@@ -21,4 +21,9 @@ public class ApiClientImpl implements ApiClient {
     public Result<List<ApiResourceDTO>> listApiResource() {
         return apiFacade.listApi();
     }
+
+    @Override
+    public Result<Boolean> invokeResource(String username, String apiCode) {
+        return apiFacade.invokeResource(username,apiCode);
+    }
 }

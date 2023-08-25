@@ -13,6 +13,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 import static com.publicapi.constants.APIConstants.ENABLE;
+import static com.publicapi.constants.APIConstants.REQUEST;
 
 
 @DubboService
@@ -29,5 +30,10 @@ public class ApiFacadeImpl implements ApiFacade {
         listQuery.setStatus(ENABLE);
         List<ApiResource> apiResources = apiService.listApi(listQuery);
         return Result.success(apiConvert.listModal2Dto(apiResources));
+    }
+
+    @Override
+    public Result<Boolean> invokeResource(String username, String apiCode) {
+        return Result.success(apiService.invokeResource(username,apiCode));
     }
 }
