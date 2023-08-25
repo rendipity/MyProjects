@@ -81,7 +81,7 @@ public class AccessVerificationGlobalFilter implements GlobalFilter, Ordered {
         // 校验失败 拦截返回
         if (!checkedSignature){
             // todo 先把sign去掉
-            log.info("sign错误");
+            log.info("sign不合法");
            // throw new ApiManageException(SIGN_INVALID);
         }
         // 校验成功将 userid和username存在请求头中，后续记录次数需要使用
@@ -115,12 +115,15 @@ public class AccessVerificationGlobalFilter implements GlobalFilter, Ordered {
                 ||ObjectUtil.isEmpty(sign)
                 ||ObjectUtil.isEmpty(nonce)
                 ||ObjectUtil.isEmpty(timestamp)){
+            log.info("参数不合法! accessKeys:{}, sign:{}, nonce:{}, timestamp:{}",accessKeys, sign, nonce, timestamp);
             throw new ApiManageException(PARAMETER_EXCEPTION);
         }
     }
     private void checkExpired(long timestamp){
         long currentTime = System.currentTimeMillis();
-        if (Math.abs(currentTime-timestamp)> (long)NONCE_INTERVAL*60*1000) {
+        long gap = 0;
+        if ((gap=Math.abs(currentTime-timestamp))> (long)NONCE_INTERVAL*60*1000) {
+            log.info("请求已过期! currentTime:{}, timestamp:{}, gap:{}",currentTime,timestamp,gap);
             throw new ApiManageException(TIMESTAMP_INVALID);
         }
     }
@@ -132,6 +135,7 @@ public class AccessVerificationGlobalFilter implements GlobalFilter, Ordered {
     private void checkRepeatRequest(String nonce){
         RBucket<Object> bucket = redissonClient.getBucket(redisKey(nonce));
         if (ObjectUtil.isNotEmpty(bucket.get())){
+            log.info("重复请求! nonce:{}",nonce);
             throw new ApiManageException(REQUEST_REPEAT);
         }
         bucket.set(nonce,NONCE_INTERVAL, TimeUnit.MINUTES);

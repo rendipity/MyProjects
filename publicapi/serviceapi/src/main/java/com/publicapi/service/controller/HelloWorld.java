@@ -1,10 +1,7 @@
 package com.publicapi.service.controller;
 
 import com.publicapi.service.controller.modal.Student;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/serviceapi")
@@ -19,8 +16,8 @@ public class HelloWorld {
     public String helloWorld_post(String name){
         return "Post: hello, "+name;
     }
-    @GetMapping("/student")
-    public Student getStudent(String id){
-        return new Student(id,"lijie",22);
+    @PostMapping("/student")
+    public Student getStudent(@RequestBody Student student){
+        return student;
     }
 }
