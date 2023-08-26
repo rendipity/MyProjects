@@ -85,18 +85,7 @@ public class LogGlobalFilter implements GlobalFilter, Ordered {
                 String value = param.substring(i+1);
                 builder.append(key).append("=").append(value).append("\n");
             }
-        }/*else{
-            Flux<DataBuffer> body = request.getBody();
-            AtomicReference<String> bodyRef = new AtomicReference<>();
-            body.subscribe(buffer -> {
-
-                CharBuffer charBuffer = StandardCharsets.UTF_8.decode(buffer.asByteBuffer());
-
-                DataBufferUtils.release(buffer);
-                bodyRef.set(charBuffer.toString());
-            });
-            log.info(bodyRef.get());
-        }*/
+        }
         builder.append("===============================================\n");
         log.info(builder.toString());
     }
