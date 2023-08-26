@@ -39,6 +39,7 @@ public enum ErrorResultEnum {
     REQUEST_REPEAT("00105","请勿重复请求"),
     INVOKE_TIME_NOT_ENOUGH("00106","调用次数已耗尽"),
     OVER_THE_RATE_LIMIT("00107","接口使用频繁，请稍后重试..."),
+    ROUTE_NOT_EXIST("00108","接口不存在"),
     ;
     private String errorCode;
     private String errorMessage;

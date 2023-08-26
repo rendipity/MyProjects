@@ -6,16 +6,22 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
+import org.springframework.core.io.buffer.DataBuffer;
+import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.net.URI;
+import java.nio.CharBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static com.publicapi.constant.FilterOrder.LOG_GLOBAL_FILTER;
 
@@ -79,7 +85,18 @@ public class LogGlobalFilter implements GlobalFilter, Ordered {
                 String value = param.substring(i+1);
                 builder.append(key).append("=").append(value).append("\n");
             }
-        }
+        }/*else{
+            Flux<DataBuffer> body = request.getBody();
+            AtomicReference<String> bodyRef = new AtomicReference<>();
+            body.subscribe(buffer -> {
+
+                CharBuffer charBuffer = StandardCharsets.UTF_8.decode(buffer.asByteBuffer());
+
+                DataBufferUtils.release(buffer);
+                bodyRef.set(charBuffer.toString());
+            });
+            log.info(bodyRef.get());
+        }*/
         builder.append("===============================================\n");
         log.info(builder.toString());
     }
