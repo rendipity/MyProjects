@@ -8,14 +8,16 @@ spring:
     gateway:
       routes:
         ###路由id
-        #- id: hello-router
+        - id: hello-router
           ####转发http://www.gblfy.com/
-        #  uri: http://localhost:8001/serviceapi/hello
+          uri: http://localhost:8001
           ###匹配规则
-        #  predicates:
-        #   - Path=/serviceapi/hello
-        #   - Method=GET
+          predicates:
+           - Path=/serviceapi/hello
+           - Method=GET
              #dubbo
+          filters:
+            - RateLimiter=100
   redis:
     url: 127.0.0.1:6379
     # username:
