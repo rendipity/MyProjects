@@ -36,7 +36,7 @@ public interface ApiUserConvert {
     UserInfo modal2UserInfo(ApiUser user);
 
     @Mapping(source = "id",target = "userId")
-    @Mapping(source = "appKey",target = "secretKey")
+    @Mapping(source = "appSecret",target = "secretKey")
     UserAuthDTO modal2UserAuthDto(ApiUser user);
 
     List<UserAuthDTO> listModal2UserAuthDto(List<ApiUser> user);
