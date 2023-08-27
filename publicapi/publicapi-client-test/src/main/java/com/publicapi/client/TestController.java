@@ -2,7 +2,6 @@ package com.publicapi.client;
 
 import com.publicapi.sdk.client.LJPublicApiClient;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 

@@ -1,10 +1,7 @@
 package com.publicapi.util;
 
-import cn.hutool.crypto.SecureUtil;
 import cn.hutool.crypto.digest.HMac;
 import cn.hutool.crypto.digest.HmacAlgorithm;
-
-import java.util.HashMap;
 
 public class AuthUtil {
 

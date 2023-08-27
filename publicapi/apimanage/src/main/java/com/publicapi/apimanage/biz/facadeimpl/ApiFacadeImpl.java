@@ -13,7 +13,6 @@ import javax.annotation.Resource;
 import java.util.List;
 
 import static com.publicapi.constants.APIConstants.ENABLE;
-import static com.publicapi.constants.APIConstants.REQUEST;
 
 
 @DubboService
