@@ -14,7 +14,14 @@ public class AuthUtil {
     public static String generateSignature(String accessKey, String secretKey, String params, String nonce, String timestamp){
         HMac mac = new HMac(HmacAlgorithm.HmacSHA1,secretKey.getBytes());
         String content = accessKey+"-"+nonce+"-"+timestamp+"-"+params;
-        return mac.digestHex(content);
+        String sign = mac.digestHex(content);
+        System.out.println(accessKey);
+        System.out.println(secretKey);
+        System.out.println(nonce);
+        System.out.println(timestamp);
+        System.out.println(params);
+        System.out.println(sign);
+        return sign;
     }
 
     /**

@@ -1,6 +1,5 @@
 package com.publicapi.filter.globalfilter;
 
-import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
@@ -79,7 +78,7 @@ public class AccessVerificationGlobalFilter implements GlobalFilter, Ordered {
         else{
             MediaType contentType = headers.getContentType();
             long contentLength = headers.getContentLength();
-            if (contentLength >0 && MediaType.APPLICATION_JSON.equals(contentType)){
+            if (contentLength > 0 && (MediaType.APPLICATION_JSON.equals(contentType)|| MediaType.APPLICATION_JSON_UTF8.equals(contentType))){
                 GatewayContext context = (GatewayContext)exchange.getAttributes().get(GatewayContext.CACHE_GATEWAY_CONTEXT);
                 String body = context.getCacheBody();
                 params = JSONUtil.toBean(body, HashMap.class);
@@ -94,9 +93,8 @@ public class AccessVerificationGlobalFilter implements GlobalFilter, Ordered {
                 timestamp);
         // 校验失败 拦截返回
         if (!checkedSignature){
-            // todo 先把sign去掉
             log.info("sign不合法");
-           // throw new ApiManageException(SIGN_INVALID);
+            throw new ApiManageException(SIGN_INVALID);
         }
         // 校验成功将 userid和username存在请求头中，后续记录次数需要使用
         ServerHttpRequest newRequest = request.mutate()

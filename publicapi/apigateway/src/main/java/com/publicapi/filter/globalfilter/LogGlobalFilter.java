@@ -105,7 +105,7 @@ public class LogGlobalFilter implements GlobalFilter, Ordered {
             GatewayContext gatewayContext = new GatewayContext();
             exchange.getAttributes().put(GatewayContext.CACHE_GATEWAY_CONTEXT,gatewayContext);
             if(contentLength>0){
-                if(MediaType.APPLICATION_JSON.equals(contentType)){
+                if(MediaType.APPLICATION_JSON.equals(contentType) || MediaType.APPLICATION_JSON_UTF8.equals(contentType)){
                     return readBody(exchange, chain,gatewayContext,builder);
                 } else if ( MediaType.APPLICATION_FORM_URLENCODED.equals(contentType)) {
                     return readFormData(exchange, chain,gatewayContext,builder);
