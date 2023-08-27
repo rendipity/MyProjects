@@ -1,6 +1,8 @@
 package com.publicapi.util;
 
 import cn.hutool.crypto.SecureUtil;
+import cn.hutool.crypto.digest.HMac;
+import cn.hutool.crypto.digest.HmacAlgorithm;
 
 import java.util.HashMap;
 
@@ -9,13 +11,10 @@ public class AuthUtil {
     /**
      * 生成签名
      */
-    public static String generateSignature(String accessKey, String secretKey, String params, String nonce, String timeStamp){
-        HashMap<String, String> signMap = new HashMap<>();
-        signMap.put("accessKey",accessKey);
-        signMap.put("params",params);
-        signMap.put("nonce",nonce);
-        signMap.put("timeStamp",timeStamp);
-        return new String(SecureUtil.hmacSha1(secretKey).digest(signMap.toString()));
+    public static String generateSignature(String accessKey, String secretKey, String params, String nonce, String timestamp){
+        HMac mac = new HMac(HmacAlgorithm.HmacSHA1,secretKey.getBytes());
+        String content = accessKey+"-"+nonce+"-"+timestamp+"-"+params;
+        return mac.digestHex(content);
     }
 
     /**

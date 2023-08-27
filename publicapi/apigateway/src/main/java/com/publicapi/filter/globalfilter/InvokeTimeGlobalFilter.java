@@ -27,6 +27,7 @@ public class InvokeTimeGlobalFilter implements GlobalFilter, Ordered {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+        log.info("=================InvokeTimeGlobalFilter================");
         // 获取username和apiCode
         ServerHttpRequest request = exchange.getRequest();
         String username = request.getHeaders().getFirst("username");
