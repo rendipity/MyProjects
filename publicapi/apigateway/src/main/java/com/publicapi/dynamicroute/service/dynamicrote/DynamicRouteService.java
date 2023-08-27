@@ -93,7 +93,7 @@ public class DynamicRouteService implements ApplicationEventPublisherAware {
         rateLimiterFilter.setName("RateLimiter");
         Map<String,String> rateLimiterFilterParam = new HashMap<>();
         rateLimiterFilterParam.put("_genkey_0",String.valueOf(apiResource.getCallFrequency()));
-        stripPrefixFilter.setArgs(rateLimiterFilterParam);
+        rateLimiterFilter.setArgs(rateLimiterFilterParam);
         routeDefinition.setFilters(Stream.of(stripPrefixFilter,rateLimiterFilter).collect(Collectors.toList()));
         routeDefinitionWriter.save(Mono.just(routeDefinition)).subscribe();
         // 刷新网关路由配置 生效---

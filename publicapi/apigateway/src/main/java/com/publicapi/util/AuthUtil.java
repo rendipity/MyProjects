@@ -15,12 +15,6 @@ public class AuthUtil {
         HMac mac = new HMac(HmacAlgorithm.HmacSHA1,secretKey.getBytes());
         String content = accessKey+"-"+nonce+"-"+timestamp+"-"+params;
         String sign = mac.digestHex(content);
-        System.out.println(accessKey);
-        System.out.println(secretKey);
-        System.out.println(nonce);
-        System.out.println(timestamp);
-        System.out.println(params);
-        System.out.println(sign);
         return sign;
     }
 
