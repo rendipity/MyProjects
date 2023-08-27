@@ -1,10 +1,12 @@
 package com.publicapi.filter.globalfilter;
 
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.publicapi.dubboclient.AuthenticationClient;
 import com.publicapi.exception.ApiManageException;
+import com.publicapi.modal.GatewayContext;
 import com.publicapi.modal.authentication.UserAuthDTO;
 import com.publicapi.util.AuthUtil;
 import com.publicapi.util.ResultUtil;
@@ -16,6 +18,7 @@ import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
@@ -43,7 +46,7 @@ public class AccessVerificationGlobalFilter implements GlobalFilter, Ordered {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        log.info("AccessVerificationGlobalFilter");
+        log.info("=================AccessVerificationGlobalFilter================");
         ServerHttpRequest request = exchange.getRequest();
         // 获取请求头信息
         HttpHeaders headers = request.getHeaders();
@@ -67,9 +70,20 @@ public class AccessVerificationGlobalFilter implements GlobalFilter, Ordered {
             throw new ApiManageException(APP_KEY_NOT_EXIST);
         }
         // params
+        // GET 方法从url的params参数里取
         HashMap<String,String> params = new HashMap<>();
         if (request.getMethod() == HttpMethod.GET){
             getParams(request.getURI().getQuery(),params);
+        }
+        // POST 方法从请求体里面取
+        else{
+            MediaType contentType = headers.getContentType();
+            long contentLength = headers.getContentLength();
+            if (contentLength >0 && MediaType.APPLICATION_JSON.equals(contentType)){
+                GatewayContext context = (GatewayContext)exchange.getAttributes().get(GatewayContext.CACHE_GATEWAY_CONTEXT);
+                String body = context.getCacheBody();
+                params = JSONUtil.toBean(body, HashMap.class);
+            }
         }
         // 校验sign
         boolean checkedSignature = AuthUtil.checkSignature(sign,
