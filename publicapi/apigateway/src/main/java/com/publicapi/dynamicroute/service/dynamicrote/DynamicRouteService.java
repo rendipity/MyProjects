@@ -82,13 +82,19 @@ public class DynamicRouteService implements ApplicationEventPublisherAware {
         methodPredicate.setArgs(methodPredicateParams);
         routeDefinition.setPredicates(Stream.of(pathPredicate,methodPredicate).collect(Collectors.toList()));
         //routeDefinition.setPredicates(Stream.of(pathPredicate).collect(Collectors.toList()));
-        // filter
-        FilterDefinition filter = new FilterDefinition();
-        filter.setName("StripPrefix");
-        Map<String,String> filterParam = new HashMap<>();
-        filterParam.put("_genkey_0","1");
-        filter.setArgs(filterParam);
-        routeDefinition.setFilters(Stream.of(filter).collect(Collectors.toList()));
+        // StripPrefix
+        FilterDefinition stripPrefixFilter = new FilterDefinition();
+        stripPrefixFilter.setName("StripPrefix");
+        Map<String,String> stripPrefixFilterParam = new HashMap<>();
+        stripPrefixFilterParam.put("_genkey_0","1");
+        stripPrefixFilter.setArgs(stripPrefixFilterParam);
+        // RateLimiter Filter
+        FilterDefinition rateLimiterFilter = new FilterDefinition();
+        rateLimiterFilter.setName("RateLimiter");
+        Map<String,String> rateLimiterFilterParam = new HashMap<>();
+        rateLimiterFilterParam.put("_genkey_0",String.valueOf(apiResource.getCallFrequency()));
+        stripPrefixFilter.setArgs(rateLimiterFilterParam);
+        routeDefinition.setFilters(Stream.of(stripPrefixFilter,rateLimiterFilter).collect(Collectors.toList()));
         routeDefinitionWriter.save(Mono.just(routeDefinition)).subscribe();
         // 刷新网关路由配置 生效---
         //log.info("刷新网关");
