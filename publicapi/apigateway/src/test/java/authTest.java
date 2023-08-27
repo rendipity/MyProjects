@@ -1,6 +1,8 @@
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.crypto.SecureUtil;
+import cn.hutool.crypto.digest.HMac;
+import cn.hutool.crypto.digest.HmacAlgorithm;
 import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -13,13 +15,10 @@ public class authTest {
     /**
      * 生成签名
      */
-    public String generateSignature(String accessKey, String secretKey, String params, String nonce, String timeStamp){
-        HashMap<String, String> signMap = new HashMap<>();
-        signMap.put("accessKey",accessKey);
-        signMap.put("params",params);
-        signMap.put("nonce",nonce);
-        signMap.put("timeStamp",timeStamp);
-        return new String(SecureUtil.hmacSha1(secretKey).digest(signMap.toString()));
+    public String generateSignature(String accessKey, String secretKey, String params, String nonce, String timestamp){
+        HMac mac = new HMac(HmacAlgorithm.HmacSHA1,secretKey.getBytes());
+        String content = accessKey+"-"+nonce+"-"+timestamp+"-"+params;
+        return mac.digestHex(content);
     }
 
     /**

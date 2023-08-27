@@ -16,6 +16,7 @@
         <module>apimanage</module>
         <module>apigateway</module>
         <module>apicommon</module>
+        <module>publicapi-client-test</module>
     </modules>
 
     <properties>

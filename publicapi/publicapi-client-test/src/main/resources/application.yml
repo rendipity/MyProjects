@@ -1,0 +1,6 @@
+server:
+  port: 8002
+lj:
+  publicapi:
+    access-key: 1f481f72b6c843e5a368e43dafdd666a
+    secret-key: f0b9745c45b04c5cbcf189f01d805c98

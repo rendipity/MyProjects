@@ -5,6 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.publicapi.dubboclient.AuthenticationClient;
 import com.publicapi.exception.ApiManageException;
+import com.publicapi.modal.GatewayContext;
 import com.publicapi.modal.authentication.UserAuthDTO;
 import com.publicapi.util.AuthUtil;
 import com.publicapi.util.ResultUtil;
@@ -16,6 +17,7 @@ import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
@@ -27,7 +29,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static com.publicapi.constant.AccessConstant.*;
-import static com.publicapi.constant.FilterOrder.ACCESS_VERIFICATION_GLOBALFILTER;
+import static com.publicapi.constant.FilterOrder.ACCESS_VERIFICATION_GLOBAL_FILTER;
 import static com.publicapi.enums.ErrorResultEnum.*;
 
 
@@ -43,7 +45,7 @@ public class AccessVerificationGlobalFilter implements GlobalFilter, Ordered {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        log.info("AccessVerificationGlobalFilter");
+        log.info("=================AccessVerificationGlobalFilter================");
         ServerHttpRequest request = exchange.getRequest();
         // 获取请求头信息
         HttpHeaders headers = request.getHeaders();
@@ -67,9 +69,20 @@ public class AccessVerificationGlobalFilter implements GlobalFilter, Ordered {
             throw new ApiManageException(APP_KEY_NOT_EXIST);
         }
         // params
+        // GET 方法从url的params参数里取
         HashMap<String,String> params = new HashMap<>();
         if (request.getMethod() == HttpMethod.GET){
             getParams(request.getURI().getQuery(),params);
+        }
+        // POST 方法从请求体里面取
+        else{
+            MediaType contentType = headers.getContentType();
+            long contentLength = headers.getContentLength();
+            if (contentLength > 0 && (MediaType.APPLICATION_JSON.equals(contentType)|| MediaType.APPLICATION_JSON_UTF8.equals(contentType))){
+                GatewayContext context = (GatewayContext)exchange.getAttributes().get(GatewayContext.CACHE_GATEWAY_CONTEXT);
+                String body = context.getCacheBody();
+                params = JSONUtil.toBean(body, HashMap.class);
+            }
         }
         // 校验sign
         boolean checkedSignature = AuthUtil.checkSignature(sign,
@@ -80,9 +93,8 @@ public class AccessVerificationGlobalFilter implements GlobalFilter, Ordered {
                 timestamp);
         // 校验失败 拦截返回
         if (!checkedSignature){
-            // todo 先把sign去掉
-            log.info("sign错误");
-           // throw new ApiManageException(SIGN_INVALID);
+            log.info("sign不合法");
+            throw new ApiManageException(SIGN_INVALID);
         }
         // 校验成功将 userid和username存在请求头中，后续记录次数需要使用
         ServerHttpRequest newRequest = request.mutate()
@@ -97,7 +109,7 @@ public class AccessVerificationGlobalFilter implements GlobalFilter, Ordered {
 
     @Override
     public int getOrder() {
-        return ACCESS_VERIFICATION_GLOBALFILTER;
+        return ACCESS_VERIFICATION_GLOBAL_FILTER;
     }
     // name=zhangsan&param1=value1&param2=value2
     private void getParams(String query, HashMap<String,String> paramsMap){
@@ -115,12 +127,15 @@ public class AccessVerificationGlobalFilter implements GlobalFilter, Ordered {
                 ||ObjectUtil.isEmpty(sign)
                 ||ObjectUtil.isEmpty(nonce)
                 ||ObjectUtil.isEmpty(timestamp)){
+            log.info("参数不合法! accessKeys:{}, sign:{}, nonce:{}, timestamp:{}",accessKeys, sign, nonce, timestamp);
             throw new ApiManageException(PARAMETER_EXCEPTION);
         }
     }
     private void checkExpired(long timestamp){
         long currentTime = System.currentTimeMillis();
-        if (Math.abs(currentTime-timestamp)> (long)NONCE_INTERVAL*60*1000) {
+        long gap = 0;
+        if ((gap=Math.abs(currentTime-timestamp))> (long)NONCE_INTERVAL*60*1000) {
+            log.info("请求已过期! currentTime:{}, timestamp:{}, gap:{}",currentTime,timestamp,gap);
             throw new ApiManageException(TIMESTAMP_INVALID);
         }
     }
@@ -132,6 +147,7 @@ public class AccessVerificationGlobalFilter implements GlobalFilter, Ordered {
     private void checkRepeatRequest(String nonce){
         RBucket<Object> bucket = redissonClient.getBucket(redisKey(nonce));
         if (ObjectUtil.isNotEmpty(bucket.get())){
+            log.info("重复请求! nonce:{}",nonce);
             throw new ApiManageException(REQUEST_REPEAT);
         }
         bucket.set(nonce,NONCE_INTERVAL, TimeUnit.MINUTES);

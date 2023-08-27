@@ -8,4 +8,7 @@ import java.util.List;
 public interface ApiClient {
 
     Result<List<ApiResourceDTO>> listApiResource();
+
+
+    Result<Boolean> invokeResource(String username, String apiCode);
 }
