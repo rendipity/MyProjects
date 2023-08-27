@@ -19,6 +19,6 @@ public class HelloWorld {
     @PostMapping("/student")
     public Student getStudent(@RequestBody Student student){
         System.out.println(student);
-        return new Student("0000000","0000",0);
+        return new Student(student.getId()+100,student.getName(),student.getAge()+10);
     }
 }
