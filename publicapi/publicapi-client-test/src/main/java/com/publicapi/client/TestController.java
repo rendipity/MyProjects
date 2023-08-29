@@ -15,7 +15,7 @@ public class TestController {
 
     @GetMapping("/test")
     public String testGet(){
-        String url = "http://localhost:8080/serviceapi/hello";
+        String url = "http://localhost:8080/Bnkq9E/serviceapi/hello";
         String params = "{\"name\":\"张三\"}";
         return client.get(url,params);
     }

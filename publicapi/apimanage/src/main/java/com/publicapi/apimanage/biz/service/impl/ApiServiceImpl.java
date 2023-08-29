@@ -1,5 +1,7 @@
 package com.publicapi.apimanage.biz.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
@@ -11,10 +13,12 @@ import com.publicapi.apimanage.biz.convert.ApiParamsConvert;
 import com.publicapi.apimanage.biz.convert.ApiResourceConvert;
 import com.publicapi.apimanage.biz.service.ApiService;
 import com.publicapi.apimanage.biz.statemachine.ApiStateMachine;
+import com.publicapi.apimanage.common.UserContext;
 import com.publicapi.apimanage.common.qto.ApiEvent;
 import com.publicapi.apimanage.common.qto.ApiListQuery;
 import com.publicapi.apimanage.common.qto.ApiPageQuery;
 import com.publicapi.apimanage.common.utils.CodeUtil;
+import com.publicapi.apimanage.common.utils.RedisCodeUtil;
 import com.publicapi.apimanage.core.service.mq.MqService;
 import com.publicapi.apimanage.dao.DO.ApiParamsDO;
 import com.publicapi.apimanage.dao.DO.ApiResourceDO;
@@ -24,16 +28,19 @@ import com.publicapi.apimanage.dao.repository.ApiResourceRepository;
 import com.publicapi.apimanage.dao.repository.InvokeInfoRepository;
 import com.publicapi.exception.ApiManageException;
 import com.publicapi.modal.CommonPage;
+import org.redisson.api.RScoredSortedSet;
+import org.redisson.api.RSortedSet;
+import org.redisson.api.RedissonClient;
+import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.annotation.Resource;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.publicapi.apimanage.biz.constants.ApiManageConstants.INVOKE_TIME_RANK_CODE;
 import static com.publicapi.constants.APIConstants.REQUEST;
 import static com.publicapi.constants.APIConstants.RESPONSE;
 import static com.publicapi.enums.ErrorResultEnum.*;
@@ -41,8 +48,6 @@ import static com.publicapi.modal.mq.RabbitMqConstants.*;
 
 @Service
 public class ApiServiceImpl implements ApiService {
-
-    private final String CREATOR = "lijie";
 
     @Resource
     private ApiResourceConvert apiResourceConvert;
@@ -67,6 +72,9 @@ public class ApiServiceImpl implements ApiService {
     @Resource
     private InvokeInfoRepository invokeInfoRepository;
 
+    @Resource
+    private RedissonClient redissonClient;
+
     @Override
     public String createApi(ApiResource apiResource) {
         // 判断url是否重复
@@ -75,8 +83,7 @@ public class ApiServiceImpl implements ApiService {
         String code = generateCode();
         apiResource.setCode(code);
         apiResource.setCreateTime(new Date());
-        // todo creator
-        apiResource.setCreator(CREATOR);
+        apiResource.setCreator(UserContext.get().getUsername());
         // 合并请求参数和响应参数
         List<ApiParams> requestParams = apiResource.getRequestParams();
         List<ApiParamsDO> requestParamsDOS = paramsConvert.listModal2Do(requestParams);
@@ -218,10 +225,24 @@ public class ApiServiceImpl implements ApiService {
         // todo 加锁，原子操作避免并发的错误
         InvokeInfoDO invokeInfo = invokeInfoRepository.getOne(username);
         if (ObjectUtil.isNotEmpty(invokeInfo)&&invokeInfo.getInvokeTimes()<invokeInfo.getTotalTimes()){
+            // 事务，保证都能成功
             invokeInfo.setInvokeTimes(invokeInfo.getInvokeTimes()+1);
             invokeInfoRepository.updateById(invokeInfo);
+            // 今日对应接口的调用次数+1
+            String formattedDate = DateUtil.format(DateUtil.date(), "yyyy/MM/dd");
+            RScoredSortedSet<Object> scoredSortedSet = redissonClient.getScoredSortedSet(RedisCodeUtil.generateRankListKey(INVOKE_TIME_RANK_CODE, formattedDate));
+            scoredSortedSet.addScore(apiCode,1);
             return true;
         }
         return false;
+    }
+
+    @Override
+    public List<ApiResource> listApi(List<String> codes) {
+        if (CollectionUtil.isEmpty(codes)){
+            return new ArrayList<>();
+        }
+        List<ApiResourceDO> resourceDOS = apiResourceRepository.list(Wrappers.<ApiResourceDO>lambdaQuery().in(ApiResourceDO::getCode, codes));
+        return apiResourceConvert.listDo2modal(resourceDOS);
     }
 }
