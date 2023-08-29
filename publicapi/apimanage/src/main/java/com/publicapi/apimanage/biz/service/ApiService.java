@@ -43,4 +43,6 @@ public interface ApiService {
     public Boolean removeApi(String apiCode);
 
     Boolean invokeResource(String username, String apiCode);
+
+    List<ApiResource> listApi(List<String> codes);
 }

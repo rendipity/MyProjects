@@ -33,4 +33,6 @@ public class ApiManageConstants {
     public static final String  PHONE_REGULAR= "/^1(3\\d|4[5-9]|5[0-35-9]|6[2567]|7[0-8]|8\\d|9[0-35-9])\\d{8}$/";
 
     public static final String IP_REGULAR = "^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3})$";
+
+    public static final String INVOKE_TIME_RANK_CODE = "invokeTime";
 }

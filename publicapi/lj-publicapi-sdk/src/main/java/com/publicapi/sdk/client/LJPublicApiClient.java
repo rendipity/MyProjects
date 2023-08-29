@@ -1,7 +1,6 @@
 package com.publicapi.sdk.client;
 
 
-import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.crypto.digest.HMac;
 import cn.hutool.crypto.digest.HmacAlgorithm;
@@ -11,7 +10,6 @@ import cn.hutool.json.JSONUtil;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.CountDownLatch;
 
 public class LJPublicApiClient {
 
